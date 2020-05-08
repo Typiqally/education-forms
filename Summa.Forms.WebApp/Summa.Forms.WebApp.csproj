@@ -40,6 +40,13 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Authentication.AzureAD.UI" Version="3.1.3" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.3" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Summa.Forms.Models\Summa.Forms.Models.csproj" />
     </ItemGroup>
 
 </Project>
