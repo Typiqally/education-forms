@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Summa.Forms.WebApp.Data;
+using Summa.Forms.WebApp.Services;
 
 namespace Summa.Forms.WebApp
 {
@@ -37,6 +39,10 @@ namespace Summa.Forms.WebApp
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IFormService, FormService>();
+            services.AddScoped<IRepositoryService, RepositoryService>();
+
             services.AddRazorPages();
         }
 
