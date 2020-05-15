@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -37,13 +38,14 @@ namespace Summa.Forms.WebApp.Services
 
         public async Task AddAsync(Form form)
         {
-            var entry = new RepositoryEntry()
+            var entry = new RepositoryForm
             {
-                Form = form
+                Form = form,
+                PublishDate = DateTime.Now
             };
 
-           await _context.Repository.AddAsync(entry);
-           await _context.SaveChangesAsync();
+            await _context.Repository.AddAsync(entry);
+            await _context.SaveChangesAsync();
         }
     }
 }
