@@ -1,0 +1,36 @@
+nav {
+  position: fixed;  
+  display: flex;
+  width: 100%;
+  padding: 1.5rem;
+  justify-content: space-around;
+  align-items: center;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+  color: white !important;
+  text-transform: uppercase;
+
+  .logo {
+    width: 10rem;
+  }  
+
+  .nav-items {
+    width: 550px;
+    display: flex;
+    justify-content: space-around;
+    font-size: 20px;
+
+    li {
+      list-style: none;
+    }
+
+    a {
+      text-decoration: none;
+      color: white;
+      
+      :visited {
+        color: white !important;
+      }
+    }
+  }
+}
