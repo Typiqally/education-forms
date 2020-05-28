@@ -9,6 +9,8 @@ namespace Summa.Forms.Models
         
         public QuestionType Type { get; set; }
         
+        public string Value { get; set; }
+        
         public List<QuestionOption> Options { get; set; }
     }
 }
