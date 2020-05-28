@@ -6,7 +6,7 @@ namespace Summa.Forms.WebApp.Services
 {
     public interface IRepositoryService
     {
-        Task<List<Form>> ListAsync();
+        Task<List<RepositoryForm>> ListAsync();
 
         Task AddAsync(Form form);
     }
