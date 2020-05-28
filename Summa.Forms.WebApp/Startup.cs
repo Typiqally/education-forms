@@ -1,3 +1,5 @@
+using System;
+using System.Globalization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Builder;
@@ -37,8 +39,11 @@ namespace Summa.Forms.WebApp
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            
+            {
+                options.EnableSensitiveDataLogging(); //Not safe for production
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IFormService, FormService>();
             services.AddScoped<IRepositoryService, RepositoryService>();
