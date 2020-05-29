@@ -1,1 +1,10 @@
-﻿<div>Dichotomous question</div>
+﻿@model Summa.Forms.Models.Question
+
+<div>@Model.Value</div>
+
+@{
+    foreach (var option in Model.Options.OrderBy(x => x.Index))
+    {
+        <button>@option.Value</button>
+    }
+}

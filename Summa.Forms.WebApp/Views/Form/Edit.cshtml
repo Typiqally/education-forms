@@ -1,3 +1,16 @@
-﻿@model Summa.Forms.Models.Form
+﻿@using Summa.Forms.Rendering
+@model Summa.Forms.Models.Form
+@{
+    Layout = "_FormLayout";
+}
 
 <h1>@Model.Title</h1>
+
+@{
+    var converter = new QuestionTypePartialConverter();
+    foreach (var question in Model.Questions.OrderBy(x => x.Index))
+    {
+        var partialName = converter.ConvertToString(question.Type);
+        @(await Html.PartialAsync(partialName, question))
+    }
+}

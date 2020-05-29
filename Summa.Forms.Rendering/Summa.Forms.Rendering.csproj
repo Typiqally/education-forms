@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <OutputType>Library</OutputType>
+        <LangVersion>8</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -26,6 +27,10 @@
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Summa.Forms.Models\Summa.Forms.Models.csproj" />
     </ItemGroup>
 
 </Project>

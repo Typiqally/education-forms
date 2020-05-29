@@ -70,6 +70,9 @@ namespace Summa.Forms.WebApp.Data.Migrations
                     b.Property<Guid?>("FormId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Index")
+                        .HasColumnType("int");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
@@ -88,6 +91,9 @@ namespace Summa.Forms.WebApp.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Index")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("QuestionId")
                         .HasColumnType("uniqueidentifier");
