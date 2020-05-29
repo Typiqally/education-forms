@@ -24,16 +24,13 @@ namespace Summa.Forms.WebApp.Services
             _logger = logger;
         }
 
-        public async Task<List<Form>> ListAsync()
+        public async Task<List<RepositoryForm>> ListAsync()
         {
-            var subject = _httpContextAccessor.HttpContext.User.GetSubject();
-            var entries = await _context.Repository
-                .Where(x => x.Form.AuthorId.ToString() == subject)
+            return await _context.Repository
+                .Include(x => x.Form)
+                .ThenInclude(x => x.Questions)
+                .ThenInclude(x => x.Options)
                 .ToListAsync();
-
-            var forms = entries.Select(x => x.Form).ToList();
-
-            return forms;
         }
 
         public async Task AddAsync(Form form)

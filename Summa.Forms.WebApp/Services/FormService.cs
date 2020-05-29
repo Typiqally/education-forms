@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +22,19 @@ namespace Summa.Forms.WebApp.Services
             _context = context;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
+        }
+
+        public async Task<Form> GetByIdAsync(Guid guid)
+        {
+            var subject = _httpContextAccessor.HttpContext.User.GetSubject();
+            var form = await _context.Forms
+                //.Where(x => x.AuthorId.ToString() == subject)
+                .Where(x => x.Id == guid)
+                .Include(x => x.Questions)
+                .ThenInclude(x => x.Options)
+                .FirstAsync();
+
+            return form;
         }
 
         public async Task<List<Form>> ListAsync()

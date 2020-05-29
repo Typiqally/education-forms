@@ -1,0 +1,12 @@
+﻿@model Summa.Forms.Models.Question
+
+<div>@Model.Value</div>
+@{
+    var option = Model.Options.First();
+    var range = option.Value.Split(',');
+    
+    var minimum = Convert.ToInt32(range[0]);
+    var maximum = Convert.ToInt32(range[1]);
+    
+    <input type="range" min="@minimum" max="@maximum" value="@(maximum / 2)" class="slider" id="@Model.Id">
+}
