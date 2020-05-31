@@ -1,0 +1,41 @@
+﻿.heading {
+  font-family: 'Open Sans', sans-serif;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  width: 60vw;
+  padding: 5rem;
+  color: white;
+  
+  div {
+    margin-top: 10px;
+  }
+  
+  .title {
+    font-size: 3em;
+    font-weight: 600;
+  }
+  
+  .description {
+    font-size: 2em;
+    font-weight: 300;
+    line-height: 40px;
+    
+  }
+  
+  .highlight {
+    color: $summa-pink;
+  }
+  
+  .btnStartNow {
+    margin-top: 5px;
+    border: none;
+    height: 50px;
+    width: 150px;
+    font-size: 1.25em;
+    border-radius: 5px;
+    background-color: $summa-pink;
+    color: white;
+    font-weight: 500;
+  }
+}
