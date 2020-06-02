@@ -1,15 +1,13 @@
 using System;
-using System.Globalization;
+using System.Net.Http;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Summa.Forms.WebApp.Data;
 using Summa.Forms.WebApp.Services;
 
 namespace Summa.Forms.WebApp
@@ -38,15 +36,13 @@ namespace Summa.Forms.WebApp
                 // options.Filters.Add(new AuthorizeFilter(policy));
             });
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-            {
-                options.EnableSensitiveDataLogging(); //Not safe for production
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            });
-
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IFormService, FormService>();
             services.AddScoped<IRepositoryService, RepositoryService>();
+            services.AddTransient(sp => new HttpClient
+            {
+                BaseAddress = new Uri("https://localhost:5002")
+            });
 
             services.AddRazorPages();
         }

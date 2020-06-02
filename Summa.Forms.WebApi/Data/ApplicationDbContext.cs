@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Summa.Forms.Models;
 
-namespace Summa.Forms.WebApp.Data
+namespace Summa.Forms.WebApi.Data
 {
     public class ApplicationDbContext : DbContext
     {

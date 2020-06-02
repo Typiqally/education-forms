@@ -24,5 +24,10 @@ namespace Summa.Forms.WebApp.Controllers
         {
             return View(await _formService.GetByIdAsync(id));
         }
+        
+        public async Task<IActionResult> View(Guid id)
+        {
+            return View(await _formService.GetByIdAsync(id));
+        }
     }
 }
