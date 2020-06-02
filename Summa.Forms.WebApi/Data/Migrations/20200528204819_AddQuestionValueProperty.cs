@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Summa.Forms.WebApp.Data.Migrations
+namespace Summa.Forms.WebApi.Data.Migrations
 {
     public partial class AddQuestionValueProperty : Migration
     {

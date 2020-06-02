@@ -1,16 +1,15 @@
-﻿@using Summa.Forms.Rendering
-@model Summa.Forms.Models.Form
+﻿@model Summa.Forms.Models.Form
 @{
     Layout = "_FormLayout";
 }
 
 <h1>@Model.Title</h1>
 
-@{
-    var converter = new QuestionTypePartialConverter();
-    foreach (var question in Model.Questions.OrderBy(x => x.Index))
-    {
-        var partialName = converter.ConvertToString(question.Type);
-        @(await Html.PartialAsync(partialName, question))
-    }
+@section Scripts {
+    <script src="~/js/editor.js" asp-append-version="true"></script>
 }
+
+<script type="text/javascript">
+   const model = @Html.Raw(Json.Serialize(Model));
+   console.log(model);
+</script>

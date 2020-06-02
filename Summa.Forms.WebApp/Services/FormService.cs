@@ -1,67 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Summa.Forms.Models;
-using Summa.Forms.WebApp.Data;
 using Summa.Forms.WebApp.Extensions;
 
 namespace Summa.Forms.WebApp.Services
 {
     public class FormService : IFormService
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ILogger<FormService> _logger;
+        private readonly HttpClient _http;
 
-        public FormService(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor, ILogger<FormService> logger)
+        public FormService(HttpClient http)
         {
-            _context = context;
-            _httpContextAccessor = httpContextAccessor;
-            _logger = logger;
+            _http = http;
         }
 
         public async Task<Form> GetByIdAsync(Guid guid)
         {
-            var subject = _httpContextAccessor.HttpContext.User.GetSubject();
-            var form = await _context.Forms
-                //.Where(x => x.AuthorId.ToString() == subject)
-                .Where(x => x.Id == guid)
-                .Include(x => x.Questions)
-                .ThenInclude(x => x.Options)
-                .FirstAsync();
-
-            return form;
+            return await SendRequestAsync<Form>($"/User/Forms/{guid.ToString()}");
         }
 
         public async Task<List<Form>> ListAsync()
         {
-            var subject = _httpContextAccessor.HttpContext.User.GetSubject();
-            var forms = await _context.Forms
-                .Where(x => x.AuthorId.ToString() == subject)
-                .ToListAsync();
-
-            return forms;
+            return await SendRequestAsync<List<Form>>("/User/Forms");
         }
 
         public async Task<List<Form>> ListByCategoryAsync(FormCategory category)
         {
-            var subject = _httpContextAccessor.HttpContext.User.GetSubject();
-            var forms = await _context.Forms
-                .Where(x => x.AuthorId.ToString() == subject)
-                .Where(x => x.Category == category)
-                .ToListAsync();
-
-            return forms;
+            return await SendRequestAsync<List<Form>>($"/User/Forms/Category/{category.Id}");
         }
 
         public async Task AddQuestionAsync(Form form, Question question)
         {
-            form.Questions.Add(question);
-            await _context.SaveChangesAsync();
+            throw new NotImplementedException();
+        }
+
+        private async Task<T> SendRequestAsync<T>(string uri)
+        {
+            var response = await _http.SendAsync<T>(uri);
+
+            if (!response.Message.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException("Could not fetch user forms");
+            }
+
+            return response.Data;
         }
     }
 }

@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Summa.Forms.Models", "Summa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Summa.Forms.Rendering", "Summa.Forms.Rendering\Summa.Forms.Rendering.csproj", "{E199F236-5B49-4217-9817-A676269864B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Summa.Forms.WebApi", "Summa.Forms.WebApi\Summa.Forms.WebApi.csproj", "{2F616463-3A11-4352-91AF-2E413AEF4CFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{E199F236-5B49-4217-9817-A676269864B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E199F236-5B49-4217-9817-A676269864B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E199F236-5B49-4217-9817-A676269864B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F616463-3A11-4352-91AF-2E413AEF4CFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F616463-3A11-4352-91AF-2E413AEF4CFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F616463-3A11-4352-91AF-2E413AEF4CFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F616463-3A11-4352-91AF-2E413AEF4CFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
