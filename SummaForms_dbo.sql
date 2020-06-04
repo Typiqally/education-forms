@@ -11,6 +11,7 @@ INSERT INTO SummaForms.dbo.__EFMigrationsHistory (MigrationId, ProductVersion) V
 INSERT INTO SummaForms.dbo.__EFMigrationsHistory (MigrationId, ProductVersion) VALUES (N'20200515094656_ChangeRepositoryModel', N'3.1.3');
 INSERT INTO SummaForms.dbo.__EFMigrationsHistory (MigrationId, ProductVersion) VALUES (N'20200528204819_AddQuestionValueProperty', N'3.1.3');
 INSERT INTO SummaForms.dbo.__EFMigrationsHistory (MigrationId, ProductVersion) VALUES (N'20200529091515_AddIndexProperty', N'3.1.3');
+INSERT INTO SummaForms.dbo.__EFMigrationsHistory (MigrationId, ProductVersion) VALUES (N'20200603184215_RemoveObsoleteQuestionType', N'3.1.3');
 
 create table FormCategory
 (
@@ -44,30 +45,7 @@ create index IX_Forms_CategoryId
     on Forms (CategoryId)
 go
 
-INSERT INTO SummaForms.dbo.Forms (Id, AuthorId, CategoryId, Title, Description, TimeCreated) VALUES (N'A4F27885-C3D7-4418-9924-BA844B5A05F0', N'025CF29C-AA1D-4793-AC18-FF4B2334DA4F', N'DD404B62-6C8C-4525-A378-CD136B5F88CA', N'Development form', N'Hello world!', N'2020-06-02 21:17:00.0000000');
-
-create table Question
-(
-    Id      uniqueidentifier not null
-        constraint PK_Question
-            primary key,
-    Type    int              not null,
-    FormId  uniqueidentifier
-        constraint FK_Question_Forms_FormId
-            references Forms,
-    Value   nvarchar(max),
-    [Index] int default 0    not null
-)
-go
-
-create index IX_Question_FormId
-    on Question (FormId)
-go
-
-INSERT INTO SummaForms.dbo.Question (Id, Type, FormId, Value, [Index]) VALUES (N'0A88C039-B4B4-4B74-AD05-48EB887577C9', 2, N'A4F27885-C3D7-4418-9924-BA844B5A05F0', N'How would you rate this form?', 2);
-INSERT INTO SummaForms.dbo.Question (Id, Type, FormId, Value, [Index]) VALUES (N'844A3FFA-F3DD-47E5-91F5-8C48CE070F61', 3, N'A4F27885-C3D7-4418-9924-BA844B5A05F0', N'What is your favorite programming joke?', 3);
-INSERT INTO SummaForms.dbo.Question (Id, Type, FormId, Value, [Index]) VALUES (N'65FF4F14-E08A-4FF8-A594-B2058109B325', 0, N'A4F27885-C3D7-4418-9924-BA844B5A05F0', N'Hello world isn''t a question, or is it?', 0);
-INSERT INTO SummaForms.dbo.Question (Id, Type, FormId, Value, [Index]) VALUES (N'F7B47E46-D917-4BCC-A8B0-DCA01B041080', 1, N'A4F27885-C3D7-4418-9924-BA844B5A05F0', N'Who is guaranteed to like this application? ', 1);
+INSERT INTO SummaForms.dbo.Forms (Id, AuthorId, CategoryId, Title, Description, TimeCreated) VALUES (N'A4F27885-C3D7-4418-9924-BA844B5A05F0', N'025CF29C-AA1D-4793-AC18-FF4B2334DA4F', N'DD404B62-6C8C-4525-A378-CD136B5F88CA', N'Development form test', N'Hello world!', N'2020-06-02 21:17:00.0000000');
 
 create table QuestionOption
 (
@@ -87,12 +65,11 @@ create index IX_QuestionOption_QuestionId
     on QuestionOption (QuestionId)
 go
 
-INSERT INTO SummaForms.dbo.QuestionOption (Id, Type, Value, QuestionId, [Index]) VALUES (N'69D934ED-5107-4F47-B71B-1DF7DC3C5C2B', 2, N'1,50', N'0A88C039-B4B4-4B74-AD05-48EB887577C9', 0);
-INSERT INTO SummaForms.dbo.QuestionOption (Id, Type, Value, QuestionId, [Index]) VALUES (N'426234C8-DEBC-4790-A15A-5B9CD2CD6668', 1, N'Me', N'F7B47E46-D917-4BCC-A8B0-DCA01B041080', 1);
-INSERT INTO SummaForms.dbo.QuestionOption (Id, Type, Value, QuestionId, [Index]) VALUES (N'52B84CEB-A271-4162-A0A1-9A9E9550799C', 0, N'No, it isn''t', N'65FF4F14-E08A-4FF8-A594-B2058109B325', 1);
-INSERT INTO SummaForms.dbo.QuestionOption (Id, Type, Value, QuestionId, [Index]) VALUES (N'74A07312-92E4-4078-A160-9CFB41392478', 1, N'Everybody', N'F7B47E46-D917-4BCC-A8B0-DCA01B041080', 2);
-INSERT INTO SummaForms.dbo.QuestionOption (Id, Type, Value, QuestionId, [Index]) VALUES (N'209DC003-73B9-4599-BF55-CD917BC67C86', 0, N'Yes, it is', N'65FF4F14-E08A-4FF8-A594-B2058109B325', 0);
-INSERT INTO SummaForms.dbo.QuestionOption (Id, Type, Value, QuestionId, [Index]) VALUES (N'6D4B4B22-D05F-4DCD-B3BB-F7781519533F', 1, N'You', N'F7B47E46-D917-4BCC-A8B0-DCA01B041080', 0);
+INSERT INTO SummaForms.dbo.QuestionOption (Id, Type, Value, QuestionId, [Index]) VALUES (N'69D934ED-5107-4F47-B71B-1DF7DC3C5C2B', 1, N'1', N'0A88C039-B4B4-4B74-AD05-48EB887577C9', 0);
+INSERT INTO SummaForms.dbo.QuestionOption (Id, Type, Value, QuestionId, [Index]) VALUES (N'33FCB5EA-48ED-47E2-BE3C-2BEB1C8FE936', 1, N'3', N'0A88C039-B4B4-4B74-AD05-48EB887577C9', 1);
+INSERT INTO SummaForms.dbo.QuestionOption (Id, Type, Value, QuestionId, [Index]) VALUES (N'426234C8-DEBC-4790-A15A-5B9CD2CD6668', 0, N'Me', N'F7B47E46-D917-4BCC-A8B0-DCA01B041080', 1);
+INSERT INTO SummaForms.dbo.QuestionOption (Id, Type, Value, QuestionId, [Index]) VALUES (N'74A07312-92E4-4078-A160-9CFB41392478', 0, N'Everybody', N'F7B47E46-D917-4BCC-A8B0-DCA01B041080', 2);
+INSERT INTO SummaForms.dbo.QuestionOption (Id, Type, Value, QuestionId, [Index]) VALUES (N'6D4B4B22-D05F-4DCD-B3BB-F7781519533F', 0, N'You', N'F7B47E46-D917-4BCC-A8B0-DCA01B041080', 0);
 
 create table Repository
 (
