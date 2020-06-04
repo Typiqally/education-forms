@@ -35,15 +35,24 @@ namespace Summa.Forms.WebApi
         {
             /*services.AddAuthentication(AzureADB2CDefaults.BearerAuthenticationScheme)
                 .AddAzureADB2CBearer(options => Configuration.Bind("AzureAdB2C", options));*/
-            
+
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.EnableSensitiveDataLogging(); //Not safe for production
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
-            
+
+            services.AddCors(o => o.AddPolicy("AllowInternal",
+                builder =>
+                {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                }));
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IFormService, FormService>();
+            services.AddScoped<IQuestionService, QuestionService>();
             services.AddScoped<IRepositoryService, RepositoryService>();
 
             services.AddControllers();
@@ -63,6 +72,8 @@ namespace Summa.Forms.WebApi
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseCors("AllowInternal");
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

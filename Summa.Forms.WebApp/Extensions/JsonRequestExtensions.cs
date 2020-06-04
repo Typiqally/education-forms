@@ -23,7 +23,10 @@ namespace Summa.Forms.WebApp.Extensions
             }
 
             await using var contentStream = await response.Content.ReadAsStreamAsync();
-            var data = await JsonSerializer.DeserializeAsync<T>(contentStream);
+            var data = await JsonSerializer.DeserializeAsync<T>(contentStream, new JsonSerializerOptions()
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
 
             return new JsonHttpResponseMessage<T>(response, data);
         }

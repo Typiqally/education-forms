@@ -16,9 +16,9 @@ namespace Summa.Forms.WebApp.Services
             _http = http;
         }
 
-        public async Task<Form> GetByIdAsync(Guid guid)
+        public async Task<Form> GetByIdAsync(Guid formId)
         {
-            return await SendRequestAsync<Form>($"/User/Forms/{guid.ToString()}");
+            return await SendRequestAsync<Form>($"/Form/{formId.ToString()}");
         }
 
         public async Task<List<Form>> ListAsync()

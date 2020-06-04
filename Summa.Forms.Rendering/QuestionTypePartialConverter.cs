@@ -9,9 +9,8 @@ namespace Summa.Forms.Rendering
         {
             return type switch
             {
-                QuestionType.Dichotomous => "_DichotomousQuestionPartial",
                 QuestionType.MultipleChoice => "_MultipleChoiceQuestionPartial",
-                QuestionType.Slider => "_SliderQuestionPartial",
+                QuestionType.LinearScale => "_LinearScaleQuestionPartial",
                 QuestionType.Open => "_OpenQuestionPartial",
                 _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };

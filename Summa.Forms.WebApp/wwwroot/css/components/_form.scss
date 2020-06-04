@@ -1,0 +1,6 @@
+.form-control {
+  ~input[type=text] {
+    display: block;
+    border: none;
+  }
+}

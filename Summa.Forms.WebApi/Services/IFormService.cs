@@ -10,7 +10,6 @@ namespace Summa.Forms.WebApi.Services
         Task<Form> GetByIdAsync(Guid guid);
         Task<List<Form>> ListAsync();
         Task<List<Form>> ListByCategoryAsync(FormCategory category);
-        Task AddQuestionAsync(Form form, Question question);
-        Task UpdateAsync(Form form);
+        Task UpdateValuesAsync(Form form);
     }
 }
