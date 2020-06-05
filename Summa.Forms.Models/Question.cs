@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Summa.Forms.Models
 {
+    [Bind("Type,Index,Value")]
     public class Question
     {
         public Guid Id { get; set; }

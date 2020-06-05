@@ -28,14 +28,30 @@ namespace Summa.Forms.WebApi.Controllers
             return new JsonResult(await _formService.GetByIdAsync(formId), JsonSerializationConstants.SerializerOptions);
         }
 
+        [HttpPost("{formId}/question")]
+        public async Task<IActionResult> PostQuestion(Guid formId, [FromBody] Question question)
+        {
+            var newQuestion = await _formService.AddQuestion(formId, question);
+
+            return new JsonResult(newQuestion, JsonSerializationConstants.SerializerOptions);
+        }
+        
+        [HttpDelete("{formId}/question/{questionId}")]
+        public async Task<IActionResult> DeleteQuestion(Guid formId, Guid questionId)
+        {
+            await _formService.RemoveQuestion(formId, questionId);
+
+            return NoContent();
+        }
+
         [HttpPost("{formId}/question/{questionId}/option")]
         public async Task<IActionResult> AddOption(Guid formId, Guid questionId, [FromBody] QuestionOption option)
         {
-           var newOption = await _questionService.AddOption(formId, questionId, option);
+            var newOption = await _questionService.AddOption(formId, questionId, option);
 
             return new JsonResult(newOption, JsonSerializationConstants.SerializerOptions);
         }
-        
+
         [HttpDelete("{formId}/question/{questionId}/option/{optionId}")]
         public async Task<IActionResult> DeleteOption(Guid formId, Guid questionId, Guid optionId)
         {
