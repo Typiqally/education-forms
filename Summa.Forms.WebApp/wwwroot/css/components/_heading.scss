@@ -1,14 +1,17 @@
-﻿.heading {
+﻿.index-heading {
   font-family: 'Open Sans', sans-serif;
-  position: absolute;
-  top: 60px;
-  left: 0;
-  width: 60vw;
-  padding: 5rem;
+  position: absolute;  
+  display: flex;
+  width: 100%;
+  padding: 1.5rem;
+  justify-content: space-around;
+  align-items: center;
+  top: 7.5rem;
+  left: 7.5rem;
   color: white;
   
   div {
-    margin-top: 10px;
+    margin-top: 5px;
   }
   
   .title {
@@ -19,8 +22,7 @@
   .description {
     font-size: 2em;
     font-weight: 300;
-    line-height: 40px;
-    
+    line-height: 40px;    
   }
   
   .highlight {
@@ -28,7 +30,7 @@
   }
   
   .btnStartNow {
-    margin-top: 5px;
+    margin-top: 10px;
     border: none;
     height: 50px;
     width: 150px;
@@ -38,4 +40,16 @@
     color: white;
     font-weight: 500;
   }
+
+  animation: animateText 1000ms cubic-bezier(0.5, 0.00, 0.2, 1);
+  
+  @keyframes animateText {
+      0% {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0px);
+      }
+    }  
 }

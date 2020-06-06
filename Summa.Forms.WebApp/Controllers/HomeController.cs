@@ -18,6 +18,11 @@ namespace Summa.Forms.WebApp.Controllers
         {
             return View();
         }
+        
+        public IActionResult Library()
+        {
+            return View();
+        }
 
         public IActionResult Privacy()
         {
