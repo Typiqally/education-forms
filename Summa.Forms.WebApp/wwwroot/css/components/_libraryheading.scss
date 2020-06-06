@@ -1,0 +1,21 @@
+﻿.library-heading {
+  font-family: 'Open Sans', sans-serif;
+  position: absolute;
+  display: flex;
+  width: 100%;
+  padding: 1.5rem;
+  justify-content: space-around;
+  align-items: center;
+  top: 7.5rem;
+  left: 7.5rem;
+  color: white;
+
+  div {
+    margin-top: 5px;
+  }
+
+  .title {
+    font-size: 3em;
+    font-weight: 600;
+  }
+}
