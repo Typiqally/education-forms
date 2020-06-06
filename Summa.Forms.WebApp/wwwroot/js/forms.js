@@ -56,6 +56,8 @@
     removeQuestion = async (question, node) => {
         const url = `https://localhost:5002/form/${this.form.id}/question/${question.id}`;
         await request(url, "DELETE");
+        
+        //TODO: Remove from model;
 
         node.remove();
     }
@@ -174,6 +176,8 @@ class QuestionBuilder {
         const url = `https://localhost:5002/form/${this.form.id}/question/${this.question.id}/option/${option.id}`;
         await request(url, "DELETE");
 
+        //TODO: Remove from model;
+        
         node.remove();
     }
 }
