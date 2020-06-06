@@ -1,6 +1,6 @@
 ﻿@model Summa.Forms.Models.Question
 
-<div>Multiple choice question</div>
+<div>@Model.Value</div>
 
 @{
     foreach (var option in Model.Options.OrderBy(x => x.Index))

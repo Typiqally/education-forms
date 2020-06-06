@@ -2,9 +2,8 @@
 {
     public enum QuestionType
     {
-        Dichotomous,
         MultipleChoice,
-        Slider,
+        LinearScale,
         Open
     }
 }

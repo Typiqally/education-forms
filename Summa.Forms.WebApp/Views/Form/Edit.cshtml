@@ -3,13 +3,19 @@
     Layout = "_FormLayout";
 }
 
-<h1>@Model.Title</h1>
+<h1>@Model.Title editor</h1>
 
-@section Scripts {
-    <script src="~/js/editor.js" asp-append-version="true"></script>
+<form id="form">
+    
+</form>
+
+@section Scripts
+{
+    <script src="~/js/forms.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        const model = @Html.Raw(Json.Serialize(Model))
+        console.log(model)
+        
+        startEditor(model);
+    </script>
 }
-
-<script type="text/javascript">
-   const model = @Html.Raw(Json.Serialize(Model));
-   console.log(model);
-</script>

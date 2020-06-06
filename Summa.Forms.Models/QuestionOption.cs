@@ -1,7 +1,9 @@
 ﻿using System;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Summa.Forms.Models
 {
+    [Bind("Index,Value")]
     public class QuestionOption
     {
         public Guid Id { get; set; }

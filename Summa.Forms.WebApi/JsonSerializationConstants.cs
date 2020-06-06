@@ -7,7 +7,8 @@ namespace Summa.Forms.WebApi
         public static readonly JsonSerializerOptions SerializerOptions = new JsonSerializerOptions
         {
             IgnoreNullValues = true,
-            WriteIndented = true
+            WriteIndented = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         };
     }
 }

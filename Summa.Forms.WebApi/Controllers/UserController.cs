@@ -27,31 +27,12 @@ namespace Summa.Forms.WebApi.Controllers
             return new JsonResult(await _formService.ListAsync(), JsonSerializationConstants.SerializerOptions);
         }
 
-        [HttpGet("forms/category/{guid}")]
+        [HttpGet("forms/{guid}")]
         public async Task<IActionResult> GetFormsByCategory(Guid guid)
         {
             var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == guid);
 
             return new JsonResult(await _formService.ListByCategoryAsync(category), JsonSerializationConstants.SerializerOptions);
-        }
-
-        [HttpGet("forms/{guid}")]
-        public async Task<IActionResult> GetForms(Guid guid)
-        {
-            return new JsonResult(await _formService.GetByIdAsync(guid), JsonSerializationConstants.SerializerOptions);
-        }
-
-        [HttpPut("forms/{guid}")]
-        public async Task<IActionResult> PutForm(Guid guid, [FromBody] Form form)
-        {
-            if ( guid != form.Id)
-            {
-                return BadRequest();
-            }
-
-            await _formService.UpdateAsync(form);
-
-            return NoContent();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Summa.Forms.WebApp.Services
 {
     public interface IFormService
     {
-        Task<Form> GetByIdAsync(Guid guid);
+        Task<Form> GetByIdAsync(Guid formId);
         
         Task<List<Form>> ListAsync();
         
