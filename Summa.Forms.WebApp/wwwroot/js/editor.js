@@ -249,7 +249,10 @@ class OptionBuilder {
     }
 
     buildLinearScale = () => {
-        return FormBuilder.createEditableInput(this.option)
+        const container = document.createElement("div");
+        container.appendChild(FormBuilder.createEditableInput(this.option));
+
+        return container;
     }
 }
 
@@ -288,7 +291,7 @@ class FormTracker {
                     option.value = parseInt(document.getElementById(`${option.id}-value`).getAttribute("data-initial-value"));
                 });
             });
-        
+
         console.log(this.model);
 
         const url = `https://localhost:5002/form/${this.model.id}`;
