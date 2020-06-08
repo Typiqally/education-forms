@@ -74,12 +74,12 @@ namespace Summa.Forms.WebApi.Services
                     {
                         Index = 0,
                         Type = question.Type,
-                        Value = "1"
+                        Value = 1
                     }, new QuestionOption
                     {
                         Index = 1,
                         Type = question.Type,
-                        Value = "10"
+                        Value = 10
                     });
             }
 

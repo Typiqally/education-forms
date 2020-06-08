@@ -1,12 +1,12 @@
 ﻿@model Summa.Forms.Models.Question
 
-<div>@Model.Value</div>
+<div>@Model.Title</div>
 
 @{
     foreach (var option in Model.Options.OrderBy(x => x.Index))
     {
         <input id="@option.Id" name="@Model.Id" type="radio" value="@option.Id">
-        <label for="@option.Id">@option.Value</label>
+        <label for="@option.Id">@option.Title</label>
         <br>
     }
 }

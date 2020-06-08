@@ -13,7 +13,7 @@
             .forEach((question) => {
                 const builder = new QuestionBuilder(this.form, question);
                 const node = builder.build()
-                
+
                 this.addRemoveListener(question, node);
                 root.appendChild(node);
             });
@@ -39,11 +39,11 @@
         if (length > 0) {
             index = this.form.questions[length - 1].index + 1
         }
-        
+
         const typeProvider = parseInt(prompt("Enter type number", "0"));
         const model = {
             index: index,
-            value: `Question ${index + 1}`,
+            title: `Question ${index + 1}`,
             type: typeProvider
         }
 
@@ -71,16 +71,26 @@
         node.remove();
     }
 
-    static createEditableInput = (model, type = "text") => {
-        const node = document.createElement("input");
-        node.id = model.id;
-        node.type = type;
-        node.value = model.value;
-        node.setAttribute("data-initial-value", model.value);
+    static createEditableInput = (model) => {
+        const span = document.createElement("span");
 
-        node.oninput = (event) => this.onInputEdited(event);
+        const valueNode = document.createElement("input");
+        valueNode.id = `${model.id}-value`;
+        valueNode.type = "number";
+        valueNode.value = model.value;
+        valueNode.setAttribute("data-initial-value", model.value);
+        valueNode.oninput = (event) => this.onInputEdited(event, "value");
 
-        return node;
+        const titleNode = document.createElement("input");
+        titleNode.id = `${model.id}-title`;
+        titleNode.type = "text";
+        titleNode.value = model.title;
+        titleNode.setAttribute("data-initial-title", model.title);
+        titleNode.oninput = (event) => this.onInputEdited(event, "title");
+
+        span.append(valueNode, titleNode);
+
+        return span;
     }
 
     static createPlaceholderInput = (placeholder) => {
@@ -93,9 +103,9 @@
         return node;
     }
 
-    static onInputEdited = (event) => {
+    static onInputEdited = (event, dataType) => {
         const element = event.path[0];
-        element.setAttribute("data-initial-value", element.value);
+        element.setAttribute(`data-initial-${dataType}`, element.value);
     };
 }
 
@@ -136,7 +146,7 @@ class QuestionBuilder {
             .forEach((option) => {
                 const builder = new OptionBuilder(this.question, option);
                 const node = builder.build()
-                
+
                 this.addRemoveListener(option, node);
                 nodes.push(node);
             });
@@ -169,10 +179,11 @@ class QuestionBuilder {
         if (length > 0) {
             index = this.question.options[length - 1].index + 1
         }
-        
+
         const model = {
             index: index,
-            value: `Option ${index + 1}`
+            title: `Option ${index + 1}`,
+            value: 0
         }
 
         const url = `https://localhost:5002/form/${this.form.id}/question/${this.question.id}/option`;
@@ -195,7 +206,7 @@ class QuestionBuilder {
         if (index > -1) {
             this.question.options.splice(index, 1);
         }
-        
+
         node.remove();
     }
 }
@@ -238,7 +249,7 @@ class OptionBuilder {
     }
 
     buildLinearScale = () => {
-        return FormBuilder.createEditableInput(this.option, "number")
+        return FormBuilder.createEditableInput(this.option)
     }
 }
 
@@ -260,7 +271,7 @@ class FormTracker {
             clearTimeout(timeout);
             timeout = setTimeout(async () => await this.save(), 1500)
         };
-        
+
         document.onkeypress = () => resetTimer();
         document.onmouseup = () => resetTimer();
     };
@@ -270,9 +281,15 @@ class FormTracker {
 
         this.model.questions
             .forEach((question) => {
-                question.value = document.getElementById(question.id).getAttribute("data-initial-value");
-                question.options.forEach((option) => option.value = document.getElementById(option.id).getAttribute("data-initial-value"));
+                question.title = document.getElementById(`${question.id}-title`).getAttribute("data-initial-title");
+
+                question.options.forEach((option) => {
+                    option.title = document.getElementById(`${option.id}-title`).getAttribute("data-initial-title");
+                    option.value = parseInt(document.getElementById(`${option.id}-value`).getAttribute("data-initial-value"));
+                });
             });
+        
+        console.log(this.model);
 
         const url = `https://localhost:5002/form/${this.model.id}`;
         await request(url, "PUT", this.model);
