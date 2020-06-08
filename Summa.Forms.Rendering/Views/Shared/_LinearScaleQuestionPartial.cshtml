@@ -1,10 +1,11 @@
 ﻿@model Summa.Forms.Models.Question
 
-<div>@Model.Value</div>
 @{
     var minimum = Convert.ToInt32(Model.Options.First().Value);
     var maximum = Convert.ToInt32(Model.Options.ElementAt(1).Value);
     var median = (minimum + maximum) / 2;
-    
-    <input type="range" min="@minimum" max="@maximum" value="@median" class="slider" id="@Model.Id">
+
+    <label for="@Model.Id">@Model.Value</label>
+    <br>
+    <input id="@Model.Id" name="@Model.Id" type="range" min="@minimum" max="@maximum" value="@median" class="slider">
 }

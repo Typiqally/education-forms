@@ -6,11 +6,26 @@
 
 <h1>@Model.Title</h1>
 
-@{
-    var converter = new QuestionTypePartialConverter();
-    foreach (var question in Model.Questions.OrderBy(x => x.Index))
-    {
-        var partialName = converter.ConvertToString(question.Type);
-        @(await Html.PartialAsync(partialName, question))
+<form id="answer-form" method="post">
+    @{
+        var converter = new QuestionTypePartialConverter();
+        foreach (var question in Model.Questions.OrderBy(x => x.Index))
+        {
+            var partialName = converter.ConvertToString(question.Type);
+            @(await Html.PartialAsync(partialName, question))
+        }
     }
+    <input type="submit"/>
+</form>
+
+@section Scripts
+{
+    <script src="~/js/form.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        const model = @Html.Raw(Json.Serialize(Model));
+        console.log(model);
+    
+        const node = document.getElementById("answer-form");
+        node.addEventListener("submit", async (event) => await processForm(event, node, model));
+    </script>
 }

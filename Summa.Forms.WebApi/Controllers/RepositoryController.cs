@@ -1,39 +1,36 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Summa.Forms.Models;
-using Summa.Forms.WebApi.Data;
 using Summa.Forms.WebApi.Services;
 
 namespace Summa.Forms.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UserController : ControllerBase
+    public class RepositoryController : ControllerBase
     {
-        private readonly IFormService _formService;
+        private readonly IRepositoryService _repositoryService;
         private readonly ICategoryService _categoryService;
 
-        public UserController(IFormService formService, ICategoryService categoryService)
+        public RepositoryController(IRepositoryService repositoryService, ICategoryService categoryService)
         {
-            _formService = formService;
+            _repositoryService = repositoryService;
             _categoryService = categoryService;
         }
 
-        [HttpGet("forms")]
+        [HttpGet]
         public async Task<IActionResult> GetForms()
         {
-            var forms = await _formService.ListAsync();
+            var forms = await _repositoryService.ListAsync();
 
             return new JsonResult(forms, JsonSerializationConstants.SerializerOptions);
         }
 
-        [HttpGet("forms/{guid}")]
+        [HttpGet("{guid}")]
         public async Task<IActionResult> GetFormsByCategory(Guid guid)
         {
             var category = await _categoryService.GetFormCategoryByIdAsync(guid);
-            var forms = await _formService.ListByCategoryAsync(category);
+            var forms = await _repositoryService.ListByCategoryAsync(category);
 
             return new JsonResult(forms, JsonSerializationConstants.SerializerOptions);
         }

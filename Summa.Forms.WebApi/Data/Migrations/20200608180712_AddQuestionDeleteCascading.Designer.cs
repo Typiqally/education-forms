@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Summa.Forms.WebApi.Data;
 
 namespace Summa.Forms.WebApi.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200608180712_AddQuestionDeleteCascading")]
+    partial class AddQuestionDeleteCascading
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,7 +69,7 @@ namespace Summa.Forms.WebApi.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("FormId")
+                    b.Property<Guid?>("FormId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Index")
@@ -161,11 +163,9 @@ namespace Summa.Forms.WebApi.Data.Migrations
 
             modelBuilder.Entity("Summa.Forms.Models.Question", b =>
                 {
-                    b.HasOne("Summa.Forms.Models.Form", "Form")
+                    b.HasOne("Summa.Forms.Models.Form", null)
                         .WithMany("Questions")
-                        .HasForeignKey("FormId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FormId");
                 });
 
             modelBuilder.Entity("Summa.Forms.Models.QuestionAnswer", b =>

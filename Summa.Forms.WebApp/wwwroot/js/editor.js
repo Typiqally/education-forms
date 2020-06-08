@@ -34,30 +34,39 @@
     }
 
     addQuestion = async (node, placeholder) => {
-        const length = this.form.questions.length + 1;
-        const typeProvider = parseInt(prompt("Enter type number", "2"));
+        const length = this.form.questions.length;
+        let index = 0;
+        if (length > 0) {
+            index = this.form.questions[length - 1].index + 1
+        }
+        
+        const typeProvider = parseInt(prompt("Enter type number", "0"));
         const model = {
-            index: length + 1,
-            value: `Question ${length}`,
+            index: index,
+            value: `Question ${index + 1}`,
             type: typeProvider
         }
 
         const url = `https://localhost:5002/form/${this.form.id}/question`;
-        const introduced = await request(url, "POST", model);
+        const question = await request(url, "POST", model);
 
-        this.form.questions.push(introduced);
+        this.form.questions.push(question);
 
-        const builder = new QuestionBuilder(this.form, introduced);
-        const option = builder.build();
+        const builder = new QuestionBuilder(this.form, question);
+        const questionElement = builder.build();
 
-        node.insertBefore(option, placeholder);
+        node.insertBefore(questionElement, placeholder);
+        this.addRemoveListener(question, questionElement);
     }
 
     removeQuestion = async (question, node) => {
         const url = `https://localhost:5002/form/${this.form.id}/question/${question.id}`;
         await request(url, "DELETE");
-        
-        //TODO: Remove from model;
+
+        const index = this.form.questions.indexOf(question);
+        if (index > -1) {
+            this.form.questions.splice(index, 1);
+        }
 
         node.remove();
     }
@@ -155,28 +164,37 @@ class QuestionBuilder {
     }
 
     addOption = async (placeholder) => {
-        const length = this.question.options.length + 1;
+        const length = this.question.options.length;
+        let index = 0;
+        if (length > 0) {
+            index = this.question.options[length - 1].index + 1
+        }
+        
         const model = {
-            index: length + 1,
-            value: `Option ${length}`
+            index: index,
+            value: `Option ${index + 1}`
         }
 
         const url = `https://localhost:5002/form/${this.form.id}/question/${this.question.id}/option`;
-        const introduced = await request(url, "POST", model);
+        const option = await request(url, "POST", model);
 
-        this.question.options.push(introduced);
+        this.question.options.push(option);
 
-        const builder = new OptionBuilder(this.question, introduced);
-        const node = builder.build();
+        const builder = new OptionBuilder(this.question, option);
+        const optionElement = builder.build();
 
-        this.root.insertBefore(node, placeholder);
+        this.root.insertBefore(optionElement, placeholder);
+        this.addRemoveListener(option, optionElement);
     }
 
     removeOption = async (option, node) => {
         const url = `https://localhost:5002/form/${this.form.id}/question/${this.question.id}/option/${option.id}`;
         await request(url, "DELETE");
 
-        //TODO: Remove from model;
+        const index = this.question.options.indexOf(option);
+        if (index > -1) {
+            this.question.options.splice(index, 1);
+        }
         
         node.remove();
     }
@@ -238,10 +256,13 @@ class FormTracker {
     startAutoSave = () => {
         let timeout;
 
-        document.onkeypress = () => {
+        const resetTimer = () => {
             clearTimeout(timeout);
             timeout = setTimeout(async () => await this.save(), 1500)
         };
+        
+        document.onkeypress = () => resetTimer();
+        document.onmouseup = () => resetTimer();
     };
 
     save = async () => {

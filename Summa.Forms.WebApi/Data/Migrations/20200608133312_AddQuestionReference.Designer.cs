@@ -10,8 +10,8 @@ using Summa.Forms.WebApi.Data;
 namespace Summa.Forms.WebApi.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200603184215_RemoveObsoleteQuestionType")]
-    partial class RemoveObsoleteQuestionType
+    [Migration("20200608133312_AddQuestionReference")]
+    partial class AddQuestionReference
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -88,6 +88,28 @@ namespace Summa.Forms.WebApi.Data.Migrations
                     b.ToTable("Question");
                 });
 
+            modelBuilder.Entity("Summa.Forms.Models.QuestionAnswer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("Answers");
+                });
+
             modelBuilder.Entity("Summa.Forms.Models.QuestionOption", b =>
                 {
                     b.Property<Guid>("Id")
@@ -144,6 +166,15 @@ namespace Summa.Forms.WebApi.Data.Migrations
                     b.HasOne("Summa.Forms.Models.Form", null)
                         .WithMany("Questions")
                         .HasForeignKey("FormId");
+                });
+
+            modelBuilder.Entity("Summa.Forms.Models.QuestionAnswer", b =>
+                {
+                    b.HasOne("Summa.Forms.Models.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Summa.Forms.Models.QuestionOption", b =>

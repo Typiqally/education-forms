@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Summa.Forms.Models;
 using Summa.Forms.WebApi.Data;
-using Summa.Forms.WebApi.Data.Migrations;
 using Summa.Forms.WebApi.Extensions;
 
 namespace Summa.Forms.WebApi.Services
@@ -45,6 +44,7 @@ namespace Summa.Forms.WebApi.Services
             var forms = await _context.Forms
                 .Where(x => x.AuthorId.ToString() == subject)
                 .Include(x => x.Category)
+                .AsNoTracking()
                 .ToListAsync();
 
             return forms;
@@ -56,33 +56,31 @@ namespace Summa.Forms.WebApi.Services
             var forms = await _context.Forms
                 .Where(x => x.AuthorId.ToString() == subject)
                 .Where(x => x.Category == category)
+                .AsNoTracking()
                 .ToListAsync();
 
             return forms;
         }
 
-        public async Task<Question> AddQuestion(Guid formId, Question question)
+        public async Task<Question> AddQuestionAsync(Guid formId, Question question)
         {
             var form = await GetByIdAsync(formId);
 
             question.Options = new List<QuestionOption>();
             if (question.Type == QuestionType.LinearScale)
             {
-                question.Options.AddRange(new[]
-                {
+                question.Options.AddRange(
                     new QuestionOption
                     {
                         Index = 0,
                         Type = question.Type,
                         Value = "1"
-                    },
-                    new QuestionOption
+                    }, new QuestionOption
                     {
                         Index = 1,
                         Type = question.Type,
                         Value = "10"
-                    }
-                });
+                    });
             }
 
             form.Questions.Add(question);
@@ -92,17 +90,17 @@ namespace Summa.Forms.WebApi.Services
             return question;
         }
 
-        public async Task RemoveQuestion(Guid formId, Guid questionId)
+        public async Task RemoveQuestionAsync(Guid formId, Guid questionId)
         {
             var form = await GetByIdAsync(formId);
-            var question = form.Questions.FirstOrDefault(x => x.Id == questionId);
+            var question = form.Questions.First(x => x.Id == questionId);
 
             _context.Entry(question).State = EntityState.Deleted;
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateValuesAsync(Form form)
+        public async Task<Form> UpdateValuesAsync(Form form)
         {
             try
             {
@@ -119,6 +117,8 @@ namespace Summa.Forms.WebApi.Services
             }
 
             await _context.SaveChangesAsync();
+
+            return form;
         }
     }
 }

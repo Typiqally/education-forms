@@ -54,6 +54,7 @@ namespace Summa.Forms.WebApi
             services.AddScoped<IFormService, FormService>();
             services.AddScoped<IQuestionService, QuestionService>();
             services.AddScoped<IRepositoryService, RepositoryService>();
+            services.AddScoped<ICategoryService, CategoryService>();
 
             services.AddControllers();
         }

@@ -5,7 +5,8 @@
 @{
     foreach (var option in Model.Options.OrderBy(x => x.Index))
     {
-        <input type="radio" id="@option.Id" name="group" value="@option.Value">
-        <label for="@option.Id">@option.Value</label><br>
+        <input id="@option.Id" name="@Model.Id" type="radio" value="@option.Id">
+        <label for="@option.Id">@option.Value</label>
+        <br>
     }
 }

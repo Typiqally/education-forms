@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Summa.Forms.WebApi.Data;
 
 namespace Summa.Forms.WebApi.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200608124344_AddAnswerDbSet")]
+    partial class AddAnswerDbSet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,7 +69,7 @@ namespace Summa.Forms.WebApi.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("FormId")
+                    b.Property<Guid?>("FormId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Index")
@@ -92,10 +94,7 @@ namespace Summa.Forms.WebApi.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("QuestionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("QuestionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Value")
@@ -117,7 +116,7 @@ namespace Summa.Forms.WebApi.Data.Migrations
                     b.Property<int>("Index")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("QuestionId")
+                    b.Property<Guid?>("QuestionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Type")
@@ -161,29 +160,23 @@ namespace Summa.Forms.WebApi.Data.Migrations
 
             modelBuilder.Entity("Summa.Forms.Models.Question", b =>
                 {
-                    b.HasOne("Summa.Forms.Models.Form", "Form")
+                    b.HasOne("Summa.Forms.Models.Form", null)
                         .WithMany("Questions")
-                        .HasForeignKey("FormId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FormId");
                 });
 
             modelBuilder.Entity("Summa.Forms.Models.QuestionAnswer", b =>
                 {
                     b.HasOne("Summa.Forms.Models.Question", "Question")
                         .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("QuestionId");
                 });
 
             modelBuilder.Entity("Summa.Forms.Models.QuestionOption", b =>
                 {
-                    b.HasOne("Summa.Forms.Models.Question", "Question")
+                    b.HasOne("Summa.Forms.Models.Question", null)
                         .WithMany("Options")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("QuestionId");
                 });
 
             modelBuilder.Entity("Summa.Forms.Models.RepositoryForm", b =>

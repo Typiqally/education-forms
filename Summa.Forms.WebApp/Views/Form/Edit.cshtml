@@ -11,10 +11,10 @@
 
 @section Scripts
 {
-    <script src="~/js/forms.js" asp-append-version="true"></script>
+    <script src="~/js/editor.js" asp-append-version="true"></script>
     <script type="text/javascript">
-        const model = @Html.Raw(Json.Serialize(Model))
-        console.log(model)
+        const model = @Html.Raw(Json.Serialize(Model));
+        console.log(model);
         
         startEditor(model);
     </script>

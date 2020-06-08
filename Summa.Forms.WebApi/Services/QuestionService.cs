@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -55,6 +56,21 @@ namespace Summa.Forms.WebApi.Services
             question.Options.Remove(option);
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<QuestionAnswer>> AddAnswersAsync(IEnumerable<QuestionAnswer> answers)
+        {
+            var subject = _httpContextAccessor.HttpContext.User.GetSubject();
+            var list = answers.ToList();
+            foreach (var answer in list)
+            {
+                answer.UserId = new Guid(subject);
+            }
+
+            await _context.Answers.AddRangeAsync(list);
+            await _context.SaveChangesAsync();
+
+            return list;
         }
     }
 }

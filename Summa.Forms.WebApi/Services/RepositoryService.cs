@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -27,8 +28,17 @@ namespace Summa.Forms.WebApi.Services
         {
             return await _context.Repository
                 .Include(x => x.Form)
-                .ThenInclude(x => x.Questions)
-                .ThenInclude(x => x.Options)
+                .ThenInclude(x => x.Category)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<List<RepositoryForm>> ListByCategoryAsync(FormCategory category)
+        {
+            return await _context.Repository
+                .Include(x => x.Form)
+                .Where(repositoryForm => repositoryForm.Form.Category == category)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
