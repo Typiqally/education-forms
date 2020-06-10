@@ -120,5 +120,31 @@ namespace Summa.Forms.WebApi.Services
 
             return form;
         }
+
+        public async Task<List<FormResponse>> ListResponsesAsync(Guid formId)
+        {
+            var subject = _httpContextAccessor.HttpContext.User.GetSubject();
+            var responses = await _context.Responses
+                .Where(x => x.Form.AuthorId.ToString() == subject)
+                .ToListAsync();
+
+            return responses;
+        }
+
+        public async Task<FormResponse> AddResponseAsync(Guid formId, IEnumerable<QuestionAnswer> answers)
+        {
+            var subject = _httpContextAccessor.HttpContext.User.GetSubject();
+            var response = new FormResponse
+            {
+                FormId = formId,
+                UserId = Guid.Parse(subject),
+                Answers = answers.ToList()
+            };
+
+            await _context.Responses.AddRangeAsync(response);
+            await _context.SaveChangesAsync();
+
+            return response;
+        }
     }
 }

@@ -13,5 +13,7 @@ namespace Summa.Forms.WebApi.Services
         Task<Question> AddQuestionAsync(Guid formId, Question question);
         Task RemoveQuestionAsync(Guid formId, Guid questionId);
         Task<Form> UpdateValuesAsync(Form form);
+        Task<List<FormResponse>> ListResponsesAsync(Guid formId);
+        Task<FormResponse> AddResponseAsync(Guid formId, IEnumerable<QuestionAnswer> answers);
     }
 }
