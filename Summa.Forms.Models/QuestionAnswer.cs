@@ -11,6 +11,6 @@ namespace Summa.Forms.Models
         public Guid QuestionId { get; set; }
         [JsonIgnore]
         public Question Question { get; set; }
-        public string Value { get; set; }
+        public int Value { get; set; }
     }
 }
