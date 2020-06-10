@@ -58,19 +58,20 @@ namespace Summa.Forms.WebApi.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<QuestionAnswer>> AddAnswersAsync(IEnumerable<QuestionAnswer> answers)
+        public async Task<FormResponse> AddResponseAsync(Guid formId, IEnumerable<QuestionAnswer> answers)
         {
             var subject = _httpContextAccessor.HttpContext.User.GetSubject();
-            var list = answers.ToList();
-            foreach (var answer in list)
+            var response = new FormResponse
             {
-                answer.UserId = new Guid(subject);
-            }
+                FormId = formId,
+                UserId = Guid.Parse(subject),
+                Answers = answers.ToList()
+            };
 
-            await _context.Answers.AddRangeAsync(list);
+            await _context.Responses.AddRangeAsync(response);
             await _context.SaveChangesAsync();
 
-            return list;
+            return response;
         }
     }
 }

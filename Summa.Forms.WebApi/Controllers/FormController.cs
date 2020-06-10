@@ -78,8 +78,8 @@ namespace Summa.Forms.WebApi.Controllers
             return NoContent();
         }
 
-        [HttpPost("{formId}/answers")]
-        public async Task<IActionResult> PostAnswers(Guid formId, [FromBody] IEnumerable<QuestionAnswer> answers)
+        [HttpPost("{formId}/response")]
+        public async Task<IActionResult> PostResponse(Guid formId, [FromBody] IEnumerable<QuestionAnswer> answers)
         {
             var form = await _context.Forms
                 .Where(x => x.Id == formId)
@@ -97,7 +97,7 @@ namespace Summa.Forms.WebApi.Controllers
                 return BadRequest("Question identifier is missing");
             }
 
-            var created = await _questionService.AddAnswersAsync(list);
+            var created = await _questionService.AddResponseAsync(formId, list);
             return new JsonResult(created, JsonSerializationConstants.SerializerOptions);
         }
     }

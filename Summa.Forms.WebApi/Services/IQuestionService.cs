@@ -10,6 +10,6 @@ namespace Summa.Forms.WebApi.Services
         Task<Question> GetByIdAsync(Guid formId, Guid questionId);
         Task<QuestionOption> AddOption(Guid formId, Guid questionId, QuestionOption option);
         Task RemoveOption(Guid formId, Guid questionId, Guid optionId);
-        Task<IEnumerable<QuestionAnswer>> AddAnswersAsync(IEnumerable<QuestionAnswer> answers);
+        Task<FormResponse> AddResponseAsync(Guid formId, IEnumerable<QuestionAnswer> answers);
     }
 }
