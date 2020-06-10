@@ -126,6 +126,7 @@ namespace Summa.Forms.WebApi.Services
             var subject = _httpContextAccessor.HttpContext.User.GetSubject();
             var responses = await _context.Responses
                 .Where(x => x.Form.AuthorId.ToString() == subject)
+                .Include(x => x.Answers)
                 .ToListAsync();
 
             return responses;

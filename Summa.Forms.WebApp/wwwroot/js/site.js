@@ -1,4 +1,6 @@
 ﻿const request = async (url, method = "GET", body) => {
+  console.debug(body);
+  
   return await fetch(url, {
     method: method,
     body: JSON.stringify(body),
@@ -15,7 +17,7 @@
     .then((data) => {
       return data;
     })
-    .catch((error) => {
+    .catch((error, data) => {
       console.error(error);
     });
 };

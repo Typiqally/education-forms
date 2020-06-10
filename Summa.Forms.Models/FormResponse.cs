@@ -7,7 +7,6 @@ namespace Summa.Forms.Models
     public class FormResponse
     {
         public Guid Id { get; set; }
-        [JsonIgnore]
         public Guid FormId { get; set; }
         [JsonIgnore]
         public Form Form { get; set; }

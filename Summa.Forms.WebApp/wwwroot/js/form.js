@@ -6,7 +6,7 @@
     model.questions.forEach(question => {
         const answer = {
             questionId: question.id,
-            value: node.elements[question.id].value,
+            value: parseInt(node.elements[question.id].value),
         };
         
         answers.push(answer);
