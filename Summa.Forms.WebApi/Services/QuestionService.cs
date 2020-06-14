@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -24,7 +23,7 @@ namespace Summa.Forms.WebApi.Services
             _logger = logger;
         }
 
-        public async Task<Question> GetByIdAsync(Guid formId, Guid questionId)
+        public async Task<Question> GetByIdAsync(Guid formId, Guid questionId, QueryTrackingBehavior tracking = QueryTrackingBehavior.TrackAll)
         {
             var subject = _httpContextAccessor.HttpContext.User.GetSubject();
             return await _context.Forms
@@ -32,6 +31,7 @@ namespace Summa.Forms.WebApi.Services
                 .Where(x => x.Id == formId)
                 .Include(x => x.Questions)
                 .ThenInclude(x => x.Options)
+                .AsTracking(tracking)
                 .SelectMany(x => x.Questions)
                 .FirstOrDefaultAsync(x => x.Id == questionId);
         }

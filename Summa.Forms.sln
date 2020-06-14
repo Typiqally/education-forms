@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Summa.Forms.Rendering", "Su
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Summa.Forms.WebApi", "Summa.Forms.WebApi\Summa.Forms.WebApi.csproj", "{2F616463-3A11-4352-91AF-2E413AEF4CFC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Summa.Forms.Identity", "Summa.Forms.Identity\Summa.Forms.Identity.csproj", "{785A0801-265D-422C-BB0C-21317B38B03E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{2F616463-3A11-4352-91AF-2E413AEF4CFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F616463-3A11-4352-91AF-2E413AEF4CFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F616463-3A11-4352-91AF-2E413AEF4CFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{785A0801-265D-422C-BB0C-21317B38B03E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{785A0801-265D-422C-BB0C-21317B38B03E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{785A0801-265D-422C-BB0C-21317B38B03E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{785A0801-265D-422C-BB0C-21317B38B03E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

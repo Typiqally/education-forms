@@ -12,7 +12,7 @@
         answers.push(answer);
     });
     
-    await request(`https://localhost:5002/form/${model.id}/response`, 'POST', answers);
+    await request(`/form/${model.id}/response`, 'POST', answers);
     
     alert("Data has been sent to the server!");
     

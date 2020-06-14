@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Summa.Forms.Models;
-using Summa.Forms.WebApi.Data;
 using Summa.Forms.WebApi.Services;
 
 namespace Summa.Forms.WebApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class UserController : ControllerBase
@@ -32,7 +31,7 @@ namespace Summa.Forms.WebApi.Controllers
         [HttpGet("forms/{guid}")]
         public async Task<IActionResult> GetFormsByCategory(Guid guid)
         {
-            var category = await _categoryService.GetFormCategoryByIdAsync(guid);
+            var category = await _categoryService.GetByIdAsync(guid);
             var forms = await _formService.ListByCategoryAsync(category);
 
             return new JsonResult(forms, JsonSerializationConstants.SerializerOptions);

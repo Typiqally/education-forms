@@ -1,22 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.AzureADB2C.UI;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Summa.Forms.WebApi.Data;
-using Summa.Forms.WebApi.Data.Migrations;
 using Summa.Forms.WebApi.Services;
 
 namespace Summa.Forms.WebApi
@@ -33,14 +23,20 @@ namespace Summa.Forms.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            /*services.AddAuthentication(AzureADB2CDefaults.BearerAuthenticationScheme)
-                .AddAzureADB2CBearer(options => Configuration.Bind("AzureAdB2C", options));*/
-
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.EnableSensitiveDataLogging(); //Not safe for production
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+            
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = "https://localhost:5000";
+                    options.Audience = "summa_forms_resources";
+                    // For development purposes we can include error details for debugging issues with token validation
+                    options.IncludeErrorDetails = true;
+                });
 
             services.AddCors(o => o.AddPolicy("AllowInternal",
                 builder =>

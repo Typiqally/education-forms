@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Summa.Forms.Models;
@@ -10,6 +11,7 @@ using Summa.Forms.WebApi.Services;
 
 namespace Summa.Forms.WebApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class FormController : ControllerBase
@@ -28,7 +30,7 @@ namespace Summa.Forms.WebApi.Controllers
         [HttpGet("{formId}")]
         public async Task<IActionResult> GetForm(Guid formId)
         {
-            var form = await _formService.GetByIdAsync(formId);
+            var form = await _formService.GetByIdAsync(formId, false);
 
             return new JsonResult(form, JsonSerializationConstants.SerializerOptions);
         }
@@ -41,7 +43,7 @@ namespace Summa.Forms.WebApi.Controllers
                 return BadRequest();
             }
 
-            var updated = await _formService.UpdateValuesAsync(form);
+            var updated = await _formService.UpdateAsync(formId, form);
 
             return new JsonResult(updated, JsonSerializationConstants.SerializerOptions);
         }
@@ -52,6 +54,14 @@ namespace Summa.Forms.WebApi.Controllers
             var created = await _formService.AddQuestionAsync(formId, question);
 
             return new JsonResult(created, JsonSerializationConstants.SerializerOptions);
+        }
+        
+        [HttpGet("{formId}/question/{questionId}")]
+        public async Task<IActionResult> GetQuestion(Guid formId, Guid questionId)
+        {
+           var question =  await _questionService.GetByIdAsync(formId, questionId, QueryTrackingBehavior.NoTracking);
+
+           return new JsonResult(question, JsonSerializationConstants.SerializerOptions);
         }
 
         [HttpDelete("{formId}/question/{questionId}")]
@@ -73,6 +83,12 @@ namespace Summa.Forms.WebApi.Controllers
         [HttpDelete("{formId}/question/{questionId}/option/{optionId}")]
         public async Task<IActionResult> DeleteOption(Guid formId, Guid questionId, Guid optionId)
         {
+            var question = await _questionService.GetByIdAsync(formId, questionId, QueryTrackingBehavior.NoTracking);
+            if (question.Options.Count <= 1)
+            {
+                return BadRequest("A question must have at least one option");
+            }
+            
             await _questionService.RemoveOption(formId, questionId, optionId);
 
             return NoContent();
