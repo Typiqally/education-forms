@@ -316,10 +316,8 @@ namespace Summa.Forms.Identity.Controllers
             if (result.Succeeded)
             {
                 // Retrieve the application details from the database using the client_id stored in the principal.
-                var application =
-                    await _applicationManager.FindByClientIdAsync(result.Principal.GetClaim(Claims.ClientId)) ??
-                    throw new InvalidOperationException(
-                        "Details concerning the calling client application cannot be found.");
+                var application = await _applicationManager.FindByClientIdAsync(result.Principal.GetClaim(Claims.ClientId)) ??
+                                  throw new InvalidOperationException("Details concerning the calling client application cannot be found.");
 
                 // Render a form asking the user to confirm the authorization demand.
                 return View(new VerifyViewModel
@@ -334,8 +332,7 @@ namespace Summa.Forms.Identity.Controllers
             return View(new VerifyViewModel
             {
                 Error = result.Properties?.GetString(OpenIddictServerAspNetCoreConstants.Properties.Error),
-                ErrorDescription =
-                    result.Properties?.GetString(OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription)
+                ErrorDescription = result.Properties?.GetString(OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription)
             });
         }
 
@@ -378,8 +375,7 @@ namespace Summa.Forms.Identity.Controllers
             return View(nameof(Verify), new VerifyViewModel
             {
                 Error = result.Properties?.GetString(OpenIddictServerAspNetCoreConstants.Properties.Error),
-                ErrorDescription =
-                    result.Properties?.GetString(OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription)
+                ErrorDescription = result.Properties?.GetString(OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription)
             });
         }
 
@@ -448,14 +444,12 @@ namespace Summa.Forms.Identity.Controllers
                         properties: new AuthenticationProperties(new Dictionary<string, string>
                         {
                             [OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
-                            [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
-                                "The username/password couple is invalid."
+                            [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The username/password couple is invalid."
                         }));
                 }
 
                 // Validate the username/password parameters and ensure the account is not locked out.
-                var result =
-                    await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: true);
+                var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: true);
                 if (!result.Succeeded)
                 {
                     return Forbid(
@@ -463,8 +457,7 @@ namespace Summa.Forms.Identity.Controllers
                         properties: new AuthenticationProperties(new Dictionary<string, string>
                         {
                             [OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
-                            [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
-                                "The username/password couple is invalid."
+                            [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The username/password couple is invalid."
                         }));
                 }
 
@@ -485,13 +478,10 @@ namespace Summa.Forms.Identity.Controllers
                 return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
             }
 
-            else if (request.IsAuthorizationCodeGrantType() || request.IsDeviceCodeGrantType() ||
-                     request.IsRefreshTokenGrantType())
+            else if (request.IsAuthorizationCodeGrantType() || request.IsDeviceCodeGrantType() || request.IsRefreshTokenGrantType())
             {
                 // Retrieve the claims principal stored in the authorization code/device code/refresh token.
-                var principal =
-                    (await HttpContext.AuthenticateAsync(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme))
-                    .Principal;
+                var principal = (await HttpContext.AuthenticateAsync(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme)).Principal;
 
                 // Retrieve the user profile corresponding to the authorization code/refresh token.
                 // Note: if you want to automatically invalidate the authorization code/refresh token
@@ -505,8 +495,7 @@ namespace Summa.Forms.Identity.Controllers
                         properties: new AuthenticationProperties(new Dictionary<string, string>
                         {
                             [OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
-                            [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
-                                "The token is no longer valid."
+                            [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The token is no longer valid."
                         }));
                 }
 
@@ -518,8 +507,7 @@ namespace Summa.Forms.Identity.Controllers
                         properties: new AuthenticationProperties(new Dictionary<string, string>
                         {
                             [OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
-                            [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
-                                "The user is no longer allowed to sign in."
+                            [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The user is no longer allowed to sign in."
                         }));
                 }
 

@@ -1,19 +1,11 @@
-﻿<nav>
+﻿<div class="nav">
     <div>
         <img class="logo" src="~/resources/logo_summa.png" alt="Summa"/>
     </div>
     <ul class="nav-items">
-        <li>
-            <a href="#section1">Start</a>
-        </li>
-        <li>
-            <a href="#section2">Formulieren</a>
-        </li>
-        <li>
-            <a asp-controller="Home" asp-action="Library">Bibliotheek</a>
-        </li>
-        <li>
-            <a >User</a>
-        </li>
+        <li><a asp-controller="Home" asp-action="Index">Start</a></li>
+        <li><a href="#section2">Formulieren</a></li>
+        <li><a asp-controller="Home" asp-action="Library">Bibliotheek</a></li>
+        <li><a asp-controller="Authentication" asp-action="SignIn">User</a></li>
     </ul>
-</nav>
+</div>

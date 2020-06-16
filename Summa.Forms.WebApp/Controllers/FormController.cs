@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +28,12 @@ namespace Summa.Forms.WebApp.Controllers
 
         public IActionResult Index()
         {
+            var exp = HttpContext.User.Claims;
+            foreach (var claim in exp)
+            {
+                Console.WriteLine(claim.Type + " " + claim.Value);
+            }
+            
             return View();
         }
 

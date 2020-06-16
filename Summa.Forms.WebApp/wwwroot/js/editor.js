@@ -26,20 +26,33 @@ class FormBuilder {
     }
 
     build() {
-        const formNode = createNode("div");
-        formNode.id = this.form.id;
+        const node = createNode("div");
+        node.id = this.form.id;
+        node.className = "form-editor";
 
         this.form.questions.orderedForEach(question => {
             const builder = new QuestionBuilder(this.form, question);
             const questionNode = builder.build()
 
-            formNode.append(questionNode);
+            node.append(questionNode);
         });
 
         const input = FormTracker.buildPlaceholderInput("Click here to add a question");
-        formNode.appendChild(input);
+        node.appendChild(input);
 
-        return formNode;
+        return node;
+    }
+
+    static buildLineInput(node) {
+        const container = createNode("div"),
+            line = createNode("span");
+        
+        container.className = "line-input";
+        line.className = "line";
+        
+        container.append(node, line);
+        
+        return container;
     }
 }
 
@@ -50,17 +63,19 @@ class QuestionBuilder {
     }
 
     build() {
-        const container = document.createElement("div"),
+        const container = createNode("div"),
             input = FormTracker.buildTrackedInput(this.question, "text", "title"),
             remove = FormTracker.buildRemoveInput();
 
         container.id = this.question.id;
-        container.className = "question";
-
-        container.append(input, remove);
+        container.className = "container question";
+        
+        container.append(FormBuilder.buildLineInput(input));
 
         const nodes = this.buildOptions();
         nodes.forEach((element) => container.append(element));
+        
+        container.append(remove);
 
         return container;
     }
@@ -103,18 +118,18 @@ class OptionBuilder {
 
     buildMultipleChoice() {
         const container = createNode("div"),
-            radio = createNode("input"),
+            radio = createNode("span"),
             input = FormTracker.buildTrackedTitleValueInput(this.option),
             remove = FormTracker.buildRemoveInput();
 
         container.id = this.option.id;
         container.className = "option";
 
-        radio.type = "radio";
-        radio.disabled = true;
+        radio.className = "material-icons";
+        radio.innerHTML = "radio_button_unchecked";
 
         container.appendChild(radio);
-        input.forEach(node => container.appendChild(node));
+        input.forEach(node => container.appendChild(FormBuilder.buildLineInput(node)));
         container.appendChild(remove);
 
         return container;
@@ -127,7 +142,7 @@ class OptionBuilder {
         container.id = this.option.id;
         container.className = "option";
 
-        input.forEach(node => container.appendChild(node));
+        input.forEach(node => container.appendChild(FormBuilder.buildLineInput(node)));
 
         return container;
     }
@@ -187,7 +202,7 @@ class FormTracker {
             input.onclick = async () => await this.removeOption(question, option, optionNode)
         );
     }
-    
+
     save = async () => {
         console.debug("Saving...");
 
@@ -322,8 +337,8 @@ class FormTracker {
 
     static buildRemoveInput = () => {
         const node = createNode("span");
-        node.innerHTML = "&times;"
-        node.className = "remove";
+        node.innerHTML = "close"
+        node.className = "btn-icon remove material-icons";
 
         return node;
     }

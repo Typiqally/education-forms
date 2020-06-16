@@ -14,4 +14,8 @@
         <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="3.0.0-*" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Extensions" />
+    </ItemGroup>
+
 </Project>

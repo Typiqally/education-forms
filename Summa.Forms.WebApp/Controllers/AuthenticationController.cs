@@ -8,11 +8,11 @@ namespace Summa.Forms.WebApp.Controllers
     public class AuthenticationController : Controller
     {
         [HttpGet("~/signin")]
-        public ActionResult SignIn()
+        public ActionResult SignIn(string returnUrl)
         {
             // Instruct the OIDC client middleware to redirect the user agent to the identity provider.
             // Note: the authenticationType parameter must match the value configured in Startup.cs
-            return Challenge(new AuthenticationProperties { RedirectUri = "/" }, OpenIdConnectDefaults.AuthenticationScheme);
+            return Challenge(new AuthenticationProperties {RedirectUri = returnUrl ?? "/"}, OpenIdConnectDefaults.AuthenticationScheme);
         }
 
         [HttpGet("~/signout"), HttpPost("~/signout")]

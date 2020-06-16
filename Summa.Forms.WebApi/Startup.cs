@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Summa.Forms.WebApi.Data;
 using Summa.Forms.WebApi.Services;
 
@@ -36,6 +38,15 @@ namespace Summa.Forms.WebApi
                     options.Audience = "summa_forms_resources";
                     // For development purposes we can include error details for debugging issues with token validation
                     options.IncludeErrorDetails = true;
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateLifetime = true,
+                        RequireExpirationTime = true,
+                        ClockSkew = TimeSpan.Zero,
+                        NameClaimType = "name",
+                        RoleClaimType = "role"
+                    };
                 });
 
             services.AddCors(o => o.AddPolicy("AllowInternal",

@@ -38,13 +38,16 @@ $grid-map: (
 .row {
   display: flex;
   flex-wrap: wrap;
-
-
+  
   &.fill {
     height: 100%;
   }
 
   &.reverse {
     flex-direction: row-reverse;
+  }
+  
+  &.vertical-center {
+    justify-content: center;
   }
 }
