@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Summa.Forms.Models
 {

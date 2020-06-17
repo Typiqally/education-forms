@@ -7,9 +7,7 @@ namespace Summa.Forms.WebApi.Services
 {
     public interface ICategoryService
     {
-        Task<List<FormCategory>> ListFormCategoriesAsync();
-        Task<FormCategory> GetFormCategoryByIdAsync(Guid id);
-        Task<List<QuestionCategory>> ListQuestionCategoriesAsync();
-        Task<QuestionCategory> GetQuestionCategoryByIdAsync(Guid id);
+        Task<List<FormCategory>> ListAsync();
+        Task<FormCategory> GetByIdAsync(Guid id);
     }
 }

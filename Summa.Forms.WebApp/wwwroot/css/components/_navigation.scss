@@ -1,5 +1,5 @@
-nav {
-  position: fixed;  
+.nav {
+  position: relative;
   display: flex;
   width: 100%;
   padding: 1.5rem;
@@ -9,6 +9,7 @@ nav {
   font-weight: 600;
   color: white !important;
   text-transform: uppercase;
+  z-index: 1;
 
   .logo {
     width: 10rem;

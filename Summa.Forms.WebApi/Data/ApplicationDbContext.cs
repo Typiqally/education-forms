@@ -13,8 +13,10 @@ namespace Summa.Forms.WebApi.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<RepositoryForm>().ToTable("Repository");
+            modelBuilder.Entity<Form>().ToTable("Form");
+            modelBuilder.Entity<FormResponse>().ToTable("FormResponse");
             modelBuilder.Entity<FormCategory>().ToTable("FormCategory");
+            modelBuilder.Entity<RepositoryForm>().ToTable("Repository");
 
             modelBuilder.Entity<Form>(entity =>
             {
@@ -35,7 +37,7 @@ namespace Summa.Forms.WebApi.Data
 
         public DbSet<Form> Forms { get; set; }
 
-        public DbSet<QuestionAnswer> Answers { get; set; }
+        public DbSet<FormResponse> Responses { get; set; }
 
         public DbSet<FormCategory> Categories { get; set; }
 

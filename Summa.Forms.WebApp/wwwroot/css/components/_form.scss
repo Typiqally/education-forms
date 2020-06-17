@@ -1,6 +1,111 @@
+@import "../base/colors";
+
 .form-control {
-  ~input[type=text] {
+  ~ input[type=text] {
     display: block;
     border: none;
+  }
+}
+
+.form-editor {
+  .container {
+    background: white;
+    padding: 1.25rem 1.25rem 0;
+    border-radius: .5rem;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.19);
+    margin: 25px auto;
+
+    &.form {
+      border-top: .5rem solid $summa-pink;
+
+      .line-input:nth-last-child(1) {
+        margin-bottom: 1rem;
+      }
+    }
+
+    &.question .option {
+      display: flex;
+      align-items: center;
+      width: 100%;
+
+      &:nth-last-child(1) {
+        margin-bottom: 1rem;
+      }
+    }
+
+    &-footer {
+      display: flex;
+      flex-direction: row-reverse;
+      padding: .5rem 0;
+      border-top: 1px solid rgba(0, 0, 0, .1);
+    }
+  }
+}
+
+input {
+  border: none;
+  border-bottom: 1px solid transparent;
+  padding: .5rem;
+  font-size: 1rem;
+  color: #202124;
+  transition: border-bottom-color 100ms;
+
+  &:hover {
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+.material-icons {
+  color: #5f6368;
+}
+
+.btn-icon {
+  padding: .5rem;
+  border-radius: 50%;
+  transition: background-color .1s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, .05);
+  }
+
+  &:active {
+    background-color: rgba(0, 0, 0, .1);
+  }
+}
+
+.line-input {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .line {
+    display: inline-block;
+    height: 2px;
+    background: #ff000000;
+    transition: background-color 0.25s ease-in;
+  }
+}
+
+/* Needs SCSS Parent Selector */
+input:active + .line,
+input:focus + .line,
+.field:active + .line,
+.field:focus + .line {
+  background: $summa-pink !important;
+  animation: animateLine 0.3s;
+}
+
+@keyframes animateLine {
+  0% {
+    transform: scale(0, 1);
+  }
+  100% {
+    transform: scale(1, 1);
   }
 }

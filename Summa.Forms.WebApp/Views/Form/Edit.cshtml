@@ -1,13 +1,21 @@
 ﻿@model Summa.Forms.Models.Form
-@{
-    Layout = "_FormLayout";
-}
 
-<h1>@Model.Title editor</h1>
 
-<form id="form">
-    
-</form>
+<div class="row vertical-center">
+    <div class="col-12 col-lg-6 col-xl-5">
+        <form id="form">
+
+        </form>
+    </div>
+</div>
+
+<div class="waves-container background fill">
+    <svg class="svg-waves" preserveAspectRatio="xMaxYMax slice" viewBox="0 0 500 150">
+        <path d="M0.00,85.00 C255,150 255,0.00 500,85.00 L500.00,150.00 L0.00,150.00 Z"></path>
+        <path d="M0.00,110.00 C255,150 255,20.00 500,110.00 L500.00,150.00 L0.00,150.00 Z"></path>
+        <path d="M0.00,130.00 C255,150 255,40.00 500,130.00 L500.00,150.00 L0.00,150.00 Z"></path>
+    </svg>
+</div>
 
 @section Scripts
 {
@@ -16,6 +24,12 @@
         const model = @Html.Raw(Json.Serialize(Model));
         console.log(model);
         
-        startEditor(model);
+        const builder = new FormBuilder(model);
+        const nodes = builder.build()
+        
+        const tracker = new FormTracker(model, nodes);
+        tracker.render("form");
+        tracker.track();
+        tracker.startAutoSave();
     </script>
 }

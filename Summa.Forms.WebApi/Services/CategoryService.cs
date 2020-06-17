@@ -16,26 +16,14 @@ namespace Summa.Forms.WebApi.Services
             _context = context;
         }
 
-        public async Task<List<FormCategory>> ListFormCategoriesAsync()
+        public async Task<List<FormCategory>> ListAsync()
         {
             return await _context.Categories.ToListAsync();
         }
 
-        public async Task<FormCategory> GetFormCategoryByIdAsync(Guid id)
+        public async Task<FormCategory> GetByIdAsync(Guid id)
         {
             return await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
-        }
-
-        //TODO
-        public Task<List<QuestionCategory>> ListQuestionCategoriesAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        //TODO
-        public Task<QuestionCategory> GetQuestionCategoryByIdAsync(Guid id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

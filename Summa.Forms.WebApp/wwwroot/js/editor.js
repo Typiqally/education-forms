@@ -1,250 +1,181 @@
-﻿class FormBuilder {
+﻿createNode = (element, className) => {
+    const node = document.createElement(element);
+    if (className !== undefined) node.className = className;
+    return node;
+}
+
+Object.defineProperty(Array.prototype, "orderedForEach", {
+    value: function orderedForEach(callback) {
+        this.sort((a, b) => (a.index > b.index ? 1 : -1))
+            .forEach(callback);
+    },
+    writable: true,
+    configurable: true
+});
+
+Object.defineProperty(Array.prototype, "nextIndex", {
+    value: function nextIndex(_default = 0) {
+        const length = this.length;
+        return length > 0 ? this[length - 1].index + 1 : _default;
+    },
+    writable: true,
+    configurable: true
+});
+
+class FormBuilder {
     constructor(form) {
         this.form = form;
     }
 
-    build = () => {
-        const root = document.createElement("div");
-        root.className = "form";
-        root.setAttribute("for", this.form.id);
+    build() {
+        const node = createNode("div", "form-editor"),
+            container = createNode("div", "container form"),
+            content = createNode("div", "container-content"),
+            titleInput = FormTracker.buildTrackedInput(this.form, "text", "title"),
+            descriptionInput = FormTracker.buildTrackedInput(this.form, "text", "description"),
+            toolbar = FormTracker.buildTrackedFormToolbar();
 
-        this.form.questions
-            .sort((a, b) => (a.index > b.index ? 1 : -1))
-            .forEach((question) => {
-                const builder = new QuestionBuilder(this.form, question);
-                const node = builder.build()
-                
-                this.addRemoveListener(question, node);
-                root.appendChild(node);
-            });
+        node.id = this.form.id;
+        titleInput.className = "display-3";
 
-        const placeholder = FormBuilder.createPlaceholderInput("Click here to add a question");
-        placeholder.onclick = async () => await this.addQuestion(root, placeholder);
-        root.appendChild(placeholder);
+        content.append(
+            FormBuilder.buildLineInput(titleInput),
+            FormBuilder.buildLineInput(descriptionInput)
+        );
 
-        return root;
-    };
+        container.append(content, toolbar);
+        node.appendChild(container);
 
-    addRemoveListener = (question, node) => {
-        const elements = node.getElementsByClassName("remove-question");
+        this.form.questions.orderedForEach(question => {
+            const builder = new QuestionBuilder(this.form, question);
+            const questionNode = builder.build()
 
-        Array.from(elements).forEach((element) => {
-            element.onclick = () => this.removeQuestion(question, node);
+            node.append(questionNode);
         });
-    }
-
-    addQuestion = async (node, placeholder) => {
-        const length = this.form.questions.length;
-        let index = 0;
-        if (length > 0) {
-            index = this.form.questions[length - 1].index + 1
-        }
-        
-        const typeProvider = parseInt(prompt("Enter type number", "0"));
-        const model = {
-            index: index,
-            value: `Question ${index + 1}`,
-            type: typeProvider
-        }
-
-        const url = `https://localhost:5002/form/${this.form.id}/question`;
-        const question = await request(url, "POST", model);
-
-        this.form.questions.push(question);
-
-        const builder = new QuestionBuilder(this.form, question);
-        const questionElement = builder.build();
-
-        node.insertBefore(questionElement, placeholder);
-        this.addRemoveListener(question, questionElement);
-    }
-
-    removeQuestion = async (question, node) => {
-        const url = `https://localhost:5002/form/${this.form.id}/question/${question.id}`;
-        await request(url, "DELETE");
-
-        const index = this.form.questions.indexOf(question);
-        if (index > -1) {
-            this.form.questions.splice(index, 1);
-        }
-
-        node.remove();
-    }
-
-    static createEditableInput = (model, type = "text") => {
-        const node = document.createElement("input");
-        node.id = model.id;
-        node.type = type;
-        node.value = model.value;
-        node.setAttribute("data-initial-value", model.value);
-
-        node.oninput = (event) => this.onInputEdited(event);
 
         return node;
     }
 
-    static createPlaceholderInput = (placeholder) => {
-        const node = document.createElement("input");
-        node.type = "text";
-        node.placeholder = placeholder;
-
-        node.oninput = (event) => this.onInputEdited(event);
+    static buildMaterialIcon = (icon, className) => {
+        const classes = "material-icons".concat(" ", className);
+        const node = createNode("span", classes);
+        node.innerHTML = icon
 
         return node;
     }
 
-    static onInputEdited = (event) => {
-        const element = event.path[0];
-        element.setAttribute("data-initial-value", element.value);
-    };
+    static buildLineInput = (node) => {
+        const container = createNode("div", "line-input"),
+            line = createNode("span", "line");
+
+        container.append(node, line);
+
+        return container;
+    }
 }
 
 class QuestionBuilder {
     constructor(form, question) {
         this.form = form;
         this.question = question;
-
-        this.root = document.createElement("div");
-        this.root.className = "question";
-        this.root.setAttribute("for", this.question.id);
     }
 
-    build = () => {
-        const container = document.createElement("div");
-        const span = document.createElement("span");
-        const input = FormBuilder.createEditableInput(this.question);
+    build() {
+        const container = createNode("div", "container question"),
+            content = createNode("div", "container-content"),
+            input = FormTracker.buildTrackedInput(this.question, "text", "title"),
+            toolbar = FormTracker.buildTrackedQuestionToolbar();
 
-        const remove = document.createElement("span");
-        remove.className = "remove-question";
-        remove.innerHTML = "&times;"
+        container.id = this.question.id;
+        container.append(FormBuilder.buildLineInput(input));
 
-        span.append(input, remove)
+        const nodes = this.buildOptions();
+        nodes.forEach((element) => content.append(element));
 
-        container.appendChild(span)
-        this.root.appendChild(container)
-
-        const options = this.buildOptions(this.root);
-        options.forEach((element) => this.root.append(element));
-
-        return this.root;
-    }
-
-    buildOptions = () => {
-        const nodes = [];
-        this.question.options
-            .sort((a, b) => (a.index > b.index ? 1 : -1))
-            .forEach((option) => {
-                const builder = new OptionBuilder(this.question, option);
-                const node = builder.build()
-                
-                this.addRemoveListener(option, node);
-                nodes.push(node);
-            });
-
-        if (this.question.type === 0) {
-            nodes.push(this.buildPlaceholder());
-        }
-
-        return nodes;
-    }
-
-    buildPlaceholder = () => {
-        const placeholder = FormBuilder.createPlaceholderInput("Click here to add a option");
-        placeholder.onclick = async () => await this.addOption(placeholder);
-
-        return placeholder;
-    }
-
-    addRemoveListener = (option, node) => {
-        const elements = node.getElementsByClassName("remove-option");
-
-        Array.from(elements).forEach((element) => {
-            element.onclick = () => this.removeOption(option, node)
-        });
-    }
-
-    addOption = async (placeholder) => {
-        const length = this.question.options.length;
-        let index = 0;
-        if (length > 0) {
-            index = this.question.options[length - 1].index + 1
-        }
-        
-        const model = {
-            index: index,
-            value: `Option ${index + 1}`
-        }
-
-        const url = `https://localhost:5002/form/${this.form.id}/question/${this.question.id}/option`;
-        const option = await request(url, "POST", model);
-
-        this.question.options.push(option);
-
-        const builder = new OptionBuilder(this.question, option);
-        const optionElement = builder.build();
-
-        this.root.insertBefore(optionElement, placeholder);
-        this.addRemoveListener(option, optionElement);
-    }
-
-    removeOption = async (option, node) => {
-        const url = `https://localhost:5002/form/${this.form.id}/question/${this.question.id}/option/${option.id}`;
-        await request(url, "DELETE");
-
-        const index = this.question.options.indexOf(option);
-        if (index > -1) {
-            this.question.options.splice(index, 1);
-        }
-        
-        node.remove();
-    }
-}
-
-class OptionBuilder {
-    constructor(question, option) {
-        this.question = question;
-        this.option = option;
-    }
-
-    build = () => {
-        switch (this.question.type) {
-            case 0:
-                return this.buildMultipleChoice();
-            case 1:
-                return this.buildLinearScale();
-            case 2:
-                //No setup required
-                break;
-            default:
-                throw `Could not build options for ${this.question.id}, given type was ${this.question.type}`;
-        }
-    }
-
-    buildMultipleChoice = () => {
-        const container = document.createElement("div");
-        const span = document.createElement("span");
-        const radio = document.createElement("input");
-        radio.type = "radio";
-        radio.disabled = true;
-
-        const remove = document.createElement("span");
-        remove.className = "remove-option";
-        remove.innerHTML = "&times;"
-
-        span.append(radio, FormBuilder.createEditableInput(this.option), remove);
-        container.appendChild(span);
+        container.append(content, toolbar);
 
         return container;
     }
 
-    buildLinearScale = () => {
-        return FormBuilder.createEditableInput(this.option, "number")
+    buildOptions() {
+        const nodes = [];
+
+        this.question.options.orderedForEach(option => {
+            const builder = new OptionBuilder(this.form, this.question, option);
+            const node = builder.build()
+
+            nodes.push(node);
+        });
+
+        if (this.question.type === 0) {
+            const node = createNode("div", "option add"),
+                icon = FormBuilder.buildMaterialIcon("radio_button_unchecked"),
+                input = createNode("input"),
+                lineInput = FormBuilder.buildLineInput(input);
+
+            input.placeholder = "Add an option";
+            node.append(icon, lineInput);
+
+            nodes.push(node);
+        }
+
+        return nodes;
+    }
+}
+
+class OptionBuilder {
+    constructor(form, question, option) {
+        this.form = form;
+        this.question = question;
+        this.option = option;
+    }
+
+    build() {
+        const types = {
+            0: this.buildMultipleChoice(),
+            1: this.buildLinearScale(),
+            2: this.buildOpen(),
+        }
+
+        return types[this.question.type];
+    }
+
+    buildMultipleChoice() {
+        const container = createNode("div"),
+            radio = FormBuilder.buildMaterialIcon("radio_button_unchecked"),
+            input = FormTracker.buildTrackedTitleValueInput(this.option),
+            remove = FormBuilder.buildMaterialIcon("close", "btn-icon remove");
+
+        container.id = this.option.id;
+        container.className = "option";
+
+        container.appendChild(radio);
+        input.forEach(node => container.appendChild(FormBuilder.buildLineInput(node)));
+        container.appendChild(remove);
+
+        return container;
+    }
+
+    buildLinearScale() {
+        const container = createNode("div"),
+            input = FormTracker.buildTrackedTitleValueInput(this.option);
+
+        container.id = this.option.id;
+        container.className = "option";
+
+        input.forEach(node => container.appendChild(FormBuilder.buildLineInput(node)));
+
+        return container;
+    }
+
+    buildOpen() {
+
     }
 }
 
 class FormTracker {
-    constructor(model, node) {
-        this.model = model;
+    constructor(form, node) {
+        this.form = form;
         this.node = node;
     }
 
@@ -253,39 +184,212 @@ class FormTracker {
         element.appendChild(this.node);
     }
 
+    renderQuestion = (question, predecessor) => {
+        predecessor = predecessor !== undefined ? predecessor : this.node.children[0];
+        
+        const builder = new QuestionBuilder(this.form, question);
+        const questionNode = builder.build();
+        
+        this.node.insertBefore(questionNode, predecessor.nextSibling)
+        this.trackQuestion(question);
+    }
+
+    renderOption = (question, option) => {
+        const node = document.getElementById(question.id).querySelector(".container-content");
+        const builder = new OptionBuilder(this.form, question, option);
+        const optionNode = builder.build();
+        
+        node.insertBefore(optionNode, node.lastChild);
+        this.trackOption(question, option);
+    }
+
+    track = () => {
+        const formNode = document.getElementById(this.form.id),
+            toolbar = formNode.querySelector(".container-footer");
+
+        Array.from(toolbar.querySelectorAll(".add")).forEach(input => input.onclick = async () => await this.addAndRenderQuestion());
+
+        this.form.questions.forEach(question => {
+            this.trackQuestion(question);
+
+            question.options.forEach(option => {
+                this.trackOption(question, option);
+            });
+        });
+    }
+
+    trackQuestion = (question) => {
+        const questionNode = document.getElementById(question.id),
+            content = questionNode.querySelector(".container-content"),
+            toolbar = questionNode.querySelector(".container-footer");
+
+        Array.from(content.querySelectorAll(".add")).forEach(input => input.onclick = async () => await this.addAndRenderOption(question));
+        Array.from(toolbar.querySelectorAll(".remove")).forEach(input => input.onclick = async () => await this.removeQuestion(question, questionNode));
+        Array.from(toolbar.querySelectorAll(".add")).forEach(input => input.onclick = async () => await this.addAndRenderQuestion(questionNode));
+    }
+
+    trackOption = (question, option) => {
+        const optionNode = document.getElementById(option.id),
+            removeNodes = optionNode.getElementsByClassName("remove");
+
+        Array.from(removeNodes).forEach(input =>
+            input.onclick = async () => await this.removeOption(question, option, optionNode)
+        );
+    }
+
+    updateIndexes = (node, key) => {
+        const array = Array.from(node.children);
+
+        array.filter(element => element.className === "container question").forEach((element, index) => {
+            this.form[key].find(object => object.id === element.id).index = index;
+        });
+    }
+
+    save = async () => {
+        console.debug("Saving...");
+
+        this.updateIndexes(this.node, "questions")
+
+        this.form.title = document.getElementById(`${this.form.id}-title`).getAttribute("data-initial-title");
+        this.form.description = document.getElementById(`${this.form.id}-description`).getAttribute("data-initial-description");
+
+        this.form.questions
+            .forEach((question) => {
+                question.title = document.getElementById(`${question.id}-title`).getAttribute("data-initial-title");
+
+                question.options.forEach((option) => {
+                    option.title = document.getElementById(`${option.id}-title`).getAttribute("data-initial-title");
+                    option.value = parseInt(document.getElementById(`${option.id}-value`).getAttribute("data-initial-value"));
+                });
+            });
+
+        const url = `/form/${this.form.id}`;
+        await request(url, "PUT", this.form);
+
+        console.debug("Saved");
+    };
+
     startAutoSave = () => {
         let timeout;
 
         const resetTimer = () => {
             clearTimeout(timeout);
-            timeout = setTimeout(async () => await this.save(), 1500)
+            timeout = setTimeout(async () => await this.save(), 1000)
         };
-        
+
         document.onkeypress = () => resetTimer();
         document.onmouseup = () => resetTimer();
     };
 
-    save = async () => {
-        console.log("Saving...");
+    addQuestion = async (index) => {
+        const count = this.form.questions.nextIndex();
 
-        this.model.questions
-            .forEach((question) => {
-                question.value = document.getElementById(question.id).getAttribute("data-initial-value");
-                question.options.forEach((option) => option.value = document.getElementById(option.id).getAttribute("data-initial-value"));
-            });
+        const type = parseInt(prompt("Enter type number", "0"));
+        const model = {
+            index: index,
+            title: `Question ${count + 1}`,
+            type: type
+        };
 
-        const url = `https://localhost:5002/form/${this.model.id}`;
-        await request(url, "PUT", this.model);
+        const url = `/form/${this.form.id}/question`;
+        return await request(url, "POST", model);
+    }
 
-        console.log("Saved");
+    addOption = async (question) => {
+        const index = question.options.nextIndex()
+        const model = {
+            index: index,
+            title: `Option ${index + 1}`,
+            value: 0
+        };
+
+        const url = `/form/${this.form.id}/question/${question.id}/option`;
+        return await request(url, "POST", model);
+    }
+
+    addAndRenderQuestion = async (node) => {
+        const index = node !== undefined ? node.parentElement.childElementCount : 0;
+
+        const question = await this.addQuestion(index);
+        this.form.questions.push(question);
+
+        this.renderQuestion(question, node);
+    }
+
+    addAndRenderOption = async (question) => {
+        const option = await this.addOption(question);
+        question.options.push(option);
+        
+        this.renderOption(question, option);
+    }
+
+    removeTrackedNode = (node, list, object) => {
+        const index = list.indexOf(object);
+        if (index > -1) {
+            list.splice(index, 1);
+        }
+
+        node.remove();
+    }
+
+    removeQuestion = async (question, node) => {
+        const url = `/form/${this.form.id}/question/${question.id}`;
+        await request(url, "DELETE");
+
+        this.removeTrackedNode(node, this.form.questions, question);
+    }
+
+    removeOption = async (question, option, node) => {
+        if (question.options.length <= 1)
+            return;
+
+        const url = `/form/${this.form.id}/question/${question.id}/option/${option.id}`;
+        await request(url, "DELETE");
+
+        this.removeTrackedNode(node, question.options, option);
+    }
+
+    static onInputEdited = (event, name) => {
+        const element = event.path[0];
+        element.setAttribute(name, element.value);
     };
-}
 
-const startEditor = (model) => {
-    const builder = new FormBuilder(model);
-    const nodes = builder.build()
+    static buildTrackedInput = (object, type, key) => {
+        const node = createNode("input");
+        const name = `data-initial-${key}`;
 
-    const tracker = new FormTracker(model, nodes);
-    tracker.render("form");
-    tracker.startAutoSave();
+        node.id = `${object.id}-${key}`;
+        node.type = type;
+        node.value = object[key];
+        node.setAttribute(name, object[key]);
+        node.oninput = event => this.onInputEdited(event, name);
+
+        return node;
+    }
+
+    static buildTrackedTitleValueInput = (object) => {
+        const title = FormTracker.buildTrackedInput(object, "text", "title"),
+            input = FormTracker.buildTrackedInput(object, "number", "value");
+
+        return [title, input];
+    }
+
+    static buildTrackedQuestionToolbar = () => {
+        const container = createNode("div", "container-footer"),
+            add = FormBuilder.buildMaterialIcon("add_circle_outline", "btn-icon add"),
+            remove = FormBuilder.buildMaterialIcon("close", "btn-icon remove");
+
+        container.append(remove, add);
+
+        return container;
+    }
+
+    static buildTrackedFormToolbar = () => {
+        const container = createNode("div", "container-footer"),
+            add = FormBuilder.buildMaterialIcon("add_circle_outline", "btn-icon add");
+
+        container.append(add);
+
+        return container;
+    }
 }

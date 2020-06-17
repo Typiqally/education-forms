@@ -44,7 +44,7 @@ namespace Summa.Forms.WebApi.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Forms");
+                    b.ToTable("Form");
                 });
 
             modelBuilder.Entity("Summa.Forms.Models.FormCategory", b =>
@@ -61,6 +61,25 @@ namespace Summa.Forms.WebApi.Data.Migrations
                     b.ToTable("FormCategory");
                 });
 
+            modelBuilder.Entity("Summa.Forms.Models.FormResponse", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FormId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FormId");
+
+                    b.ToTable("FormResponse");
+                });
+
             modelBuilder.Entity("Summa.Forms.Models.Question", b =>
                 {
                     b.Property<Guid>("Id")
@@ -73,11 +92,11 @@ namespace Summa.Forms.WebApi.Data.Migrations
                     b.Property<int>("Index")
                         .HasColumnType("int");
 
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -92,20 +111,22 @@ namespace Summa.Forms.WebApi.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("FormResponseId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Value")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FormResponseId");
+
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Answers");
+                    b.ToTable("QuestionAnswer");
                 });
 
             modelBuilder.Entity("Summa.Forms.Models.QuestionOption", b =>
@@ -120,11 +141,14 @@ namespace Summa.Forms.WebApi.Data.Migrations
                     b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Value")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -159,6 +183,15 @@ namespace Summa.Forms.WebApi.Data.Migrations
                         .HasForeignKey("CategoryId");
                 });
 
+            modelBuilder.Entity("Summa.Forms.Models.FormResponse", b =>
+                {
+                    b.HasOne("Summa.Forms.Models.Form", "Form")
+                        .WithMany()
+                        .HasForeignKey("FormId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Summa.Forms.Models.Question", b =>
                 {
                     b.HasOne("Summa.Forms.Models.Form", "Form")
@@ -170,6 +203,10 @@ namespace Summa.Forms.WebApi.Data.Migrations
 
             modelBuilder.Entity("Summa.Forms.Models.QuestionAnswer", b =>
                 {
+                    b.HasOne("Summa.Forms.Models.FormResponse", null)
+                        .WithMany("Answers")
+                        .HasForeignKey("FormResponseId");
+
                     b.HasOne("Summa.Forms.Models.Question", "Question")
                         .WithMany()
                         .HasForeignKey("QuestionId")

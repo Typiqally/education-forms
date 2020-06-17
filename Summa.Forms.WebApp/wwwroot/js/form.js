@@ -6,13 +6,15 @@
     model.questions.forEach(question => {
         const answer = {
             questionId: question.id,
-            value: node.elements[question.id].value,
+            value: parseInt(node.elements[question.id].value),
         };
         
         answers.push(answer);
     });
     
-    await request(`https://localhost:5002/form/${model.id}/answers`, 'POST', answers);
+    await request(`/form/${model.id}/response`, 'POST', answers);
+    
+    alert("Data has been sent to the server!");
     
     return false;
 }

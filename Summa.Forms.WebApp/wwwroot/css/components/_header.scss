@@ -1,0 +1,47 @@
+﻿@import "../base/colors";
+
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-family: 'Open Sans', sans-serif;
+  color: white;
+  animation: animateText 1s cubic-bezier(0.5, 0.00, 0.2, 1);
+  
+  .title {
+    font-size: 3em;
+    font-weight: 600;
+  }
+  
+  .description {
+    font-size: 2em;
+    font-weight: 300;
+    line-height: 40px;    
+  }
+  
+  .highlight {
+    color: $summa-pink;
+  }
+  
+  .btnStartNow {
+    margin-top: 10px;
+    border: none;
+    height: 50px;
+    width: 150px;
+    font-size: 1.25em;
+    border-radius: 5px;
+    background-color: $summa-pink;
+    color: white;
+    font-weight: 500;
+  }
+  
+  @keyframes animateText {
+      0% {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0px);
+      }
+    }  
+}

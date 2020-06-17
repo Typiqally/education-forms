@@ -1,9 +1,11 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Summa.Forms.WebApi.Services;
 
 namespace Summa.Forms.WebApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class CategoryController : ControllerBase
@@ -18,7 +20,7 @@ namespace Summa.Forms.WebApi.Controllers
         [HttpGet("form")]
         public async Task<IActionResult> GetFormCategories()
         {
-            var categories = await _service.ListFormCategoriesAsync();
+            var categories = await _service.ListAsync();
 
             return new JsonResult(categories, JsonSerializationConstants.SerializerOptions);
         }

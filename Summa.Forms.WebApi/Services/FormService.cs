@@ -24,12 +24,17 @@ namespace Summa.Forms.WebApi.Services
             _logger = logger;
         }
 
-        public async Task<Form> GetByIdAsync(Guid guid)
+        public async Task<Form> GetByIdAsync(Guid formId, bool authorize = true)
         {
             var subject = _httpContextAccessor.HttpContext.User.GetSubject();
-            var form = await _context.Forms
-                .Where(x => x.AuthorId.ToString() == subject)
-                .Where(x => x.Id == guid)
+            var query = _context.Forms.Where(x => x.Id == formId);
+
+            if (authorize)
+            {
+                query = query.Where(x => x.AuthorId.ToString() == subject);
+            }
+
+            var form = await query
                 .Include(x => x.Category)
                 .Include(x => x.Questions)
                 .ThenInclude(x => x.Options)
@@ -67,20 +72,33 @@ namespace Summa.Forms.WebApi.Services
             var form = await GetByIdAsync(formId);
 
             question.Options = new List<QuestionOption>();
-            if (question.Type == QuestionType.LinearScale)
+            switch (question.Type)
             {
-                question.Options.AddRange(
-                    new QuestionOption
+                case QuestionType.MultipleChoice:
+                    question.Options.Add(new QuestionOption
                     {
-                        Index = 0,
                         Type = question.Type,
-                        Value = "1"
-                    }, new QuestionOption
-                    {
-                        Index = 1,
-                        Type = question.Type,
-                        Value = "10"
+                        Title = "Option 1"
                     });
+                    break;
+                case QuestionType.LinearScale:
+                    question.Options.AddRange(
+                        new QuestionOption
+                        {
+                            Index = 0,
+                            Type = question.Type,
+                            Value = 1
+                        }, new QuestionOption
+                        {
+                            Index = 1,
+                            Type = question.Type,
+                            Value = 10
+                        });
+                    break;
+                case QuestionType.Open:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             form.Questions.Add(question);
@@ -100,7 +118,7 @@ namespace Summa.Forms.WebApi.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Form> UpdateValuesAsync(Form form)
+        public async Task<Form> UpdateAsync(Guid formId, Form form)
         {
             try
             {
@@ -119,6 +137,33 @@ namespace Summa.Forms.WebApi.Services
             await _context.SaveChangesAsync();
 
             return form;
+        }
+
+        public async Task<List<FormResponse>> ListResponsesAsync(Guid formId)
+        {
+            var subject = _httpContextAccessor.HttpContext.User.GetSubject();
+            var responses = await _context.Responses
+                .Where(x => x.Form.AuthorId.ToString() == subject)
+                .Include(x => x.Answers)
+                .ToListAsync();
+
+            return responses;
+        }
+
+        public async Task<FormResponse> AddResponseAsync(Guid formId, IEnumerable<QuestionAnswer> answers)
+        {
+            var subject = _httpContextAccessor.HttpContext.User.GetSubject();
+            var response = new FormResponse
+            {
+                FormId = formId,
+                UserId = Guid.Parse(subject),
+                Answers = answers.ToList()
+            };
+
+            await _context.Responses.AddRangeAsync(response);
+            await _context.SaveChangesAsync();
+
+            return response;
         }
     }
 }

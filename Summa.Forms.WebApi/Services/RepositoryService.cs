@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Summa.Forms.Models;
 using Summa.Forms.WebApi.Data;
-using Summa.Forms.WebApi.Data.Migrations;
 
 namespace Summa.Forms.WebApi.Services
 {
