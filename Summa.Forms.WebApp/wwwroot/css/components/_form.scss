@@ -10,27 +10,25 @@
 .form-editor {
   .container {
     background: white;
-    padding: 1.25rem;
+    padding: 1.25rem 1.25rem 0;
     border-radius: .5rem;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.19);
     margin: 25px auto;
 
     &.form {
       border-top: .5rem solid $summa-pink;
-    }
-    
-    &.question {
-      padding: 1.25rem 1.25rem 0;
-    }
-  }
 
-  .question {
-    .option {
+      .line-input:nth-last-child(1) {
+        margin-bottom: 1rem;
+      }
+    }
+
+    &.question .option {
       display: flex;
       align-items: center;
       width: 100%;
 
-      &:nth-last-child(2) {
+      &:nth-last-child(1) {
         margin-bottom: 1rem;
       }
     }
@@ -51,15 +49,15 @@ input {
   font-size: 1rem;
   color: #202124;
   transition: border-bottom-color 100ms;
-}
 
-input:hover {
-  border-bottom: 1px solid rgba(0, 0, 0, .1);
-}
+  &:hover {
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+  }
 
-input:focus {
-  outline: none;
-  box-shadow: none;
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
 }
 
 .material-icons {
@@ -85,13 +83,13 @@ input:focus {
   display: flex;
   flex-direction: column;
   width: 100%;
-}
 
-.line {
-  display: inline-block;
-  height: 2px;
-  background: #ff000000;
-  transition: background-color 0.25s ease-in;
+  .line {
+    display: inline-block;
+    height: 2px;
+    background: #ff000000;
+    transition: background-color 0.25s ease-in;
+  }
 }
 
 /* Needs SCSS Parent Selector */
