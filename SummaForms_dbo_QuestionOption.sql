@@ -1,5 +1,3 @@
-INSERT INTO SummaForms.dbo.QuestionOption (Id, Type, Value, QuestionId, [Index]) VALUES (N'B104DF85-F779-4599-341E-08D80BD7A0F8', 0, N'Option 1', N'E71B9D19-2748-4629-2D55-08D80BD7249B', 0);
-INSERT INTO SummaForms.dbo.QuestionOption (Id, Type, Value, QuestionId, [Index]) VALUES (N'7DA87184-6E98-41D7-3420-08D80BD7A0F8', 0, N'Option 3', N'E71B9D19-2748-4629-2D55-08D80BD7249B', 2);
-INSERT INTO SummaForms.dbo.QuestionOption (Id, Type, Value, QuestionId, [Index]) VALUES (N'B4DBB6EA-B509-47A2-294F-08D80BDF89D9', 0, N'Option 4', N'E71B9D19-2748-4629-2D55-08D80BD7249B', 3);
-INSERT INTO SummaForms.dbo.QuestionOption (Id, Type, Value, QuestionId, [Index]) VALUES (N'F8D71C9F-C8F2-4B1A-2950-08D80BDF89D9', 0, N'Option 1', N'FE0C2106-0F20-4D6C-BBC7-08D80BDF8CBD', 0);
-INSERT INTO SummaForms.dbo.QuestionOption (Id, Type, Value, QuestionId, [Index]) VALUES (N'B577E5D4-B030-4FB5-2953-08D80BDF89D9', 0, N'Option 4', N'FE0C2106-0F20-4D6C-BBC7-08D80BDF8CBD', 3);
+INSERT INTO SummaForms.dbo.QuestionOption (Id, Type, Value, QuestionId, [Index], Title) VALUES (N'3EC1AE4C-B553-4F51-8C14-08D812E95D25', 0, 0, N'D49C7AE0-63E4-42A9-FDB6-08D812EA7069', 0, N'Option 1');
+INSERT INTO SummaForms.dbo.QuestionOption (Id, Type, Value, QuestionId, [Index], Title) VALUES (N'BB3F4F4E-CAF9-48A8-8C15-08D812E95D25', 0, 0, N'D49C7AE0-63E4-42A9-FDB6-08D812EA7069', 1, N'Option 2');
+INSERT INTO SummaForms.dbo.QuestionOption (Id, Type, Value, QuestionId, [Index], Title) VALUES (N'2E832544-FA1D-45CD-8C16-08D812E95D25', 0, 0, N'D49C7AE0-63E4-42A9-FDB6-08D812EA7069', 2, N'Option 3');
