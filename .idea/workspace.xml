@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5a6ca13a-dd56-4de0-aef7-a7999217ed01" name="Default Changelist" comment="" />
+    <list default="true" id="5a6ca13a-dd56-4de0-aef7-a7999217ed01" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/Summa.Forms.Identity/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Summa.Forms.Identity/Views/Shared/_Layout.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Summa.Forms.Identity/Views/Shared/_ValidationScriptsPartial.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Summa.Forms.Identity/Views/Shared/_ValidationScriptsPartial.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Summa.Forms.WebApp/Models/FormEditorViewModel.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Summa.Forms.WebApp/Views/Home/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Summa.Forms.WebApp/Views/Home/Index.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Summa.Forms.WebApp/Views/Home/Library.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Summa.Forms.WebApp/Views/Home/Library.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Summa.Forms.WebApp/Views/Shared/_LoginPartial.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Summa.Forms.WebApp/Views/Shared/_LoginPartial.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Summa.Forms.WebApp/Views/Shared/_NavigationPartial.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Summa.Forms.WebApp/Views/Shared/_NavigationPartial.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Summa.Forms.WebApp/wwwroot/css/base/_globals.scss" beforeDir="false" afterPath="$PROJECT_DIR$/Summa.Forms.WebApp/wwwroot/css/base/_globals.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Summa.Forms.WebApp/wwwroot/css/components/_form.scss" beforeDir="false" afterPath="$PROJECT_DIR$/Summa.Forms.WebApp/wwwroot/css/components/_form.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Summa.Forms.WebApp/wwwroot/css/layout/_grid.scss" beforeDir="false" afterPath="$PROJECT_DIR$/Summa.Forms.WebApp/wwwroot/css/layout/_grid.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Summa.Forms.WebApp/wwwroot/css/main.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/Summa.Forms.WebApp/wwwroot/css/main.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Summa.Forms.WebApp/wwwroot/css/main.min.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/Summa.Forms.WebApp/wwwroot/css/main.min.css.map" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -16,6 +36,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -33,6 +54,7 @@
       <updated>1591170602332</updated>
       <workItem from="1591170603556" duration="27000" />
       <workItem from="1592387470653" duration="1000" />
+      <workItem from="1592497201201" duration="36000" />
     </task>
     <servers />
   </component>

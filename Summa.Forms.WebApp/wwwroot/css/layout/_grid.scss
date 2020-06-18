@@ -38,6 +38,7 @@ $grid-map: (
 .row {
   display: flex;
   flex-wrap: wrap;
+  margin: 0 1rem;
   
   &.fill {
     height: 100%;
@@ -49,5 +50,13 @@ $grid-map: (
   
   &.vertical-center {
     justify-content: center;
+  }
+  
+  &.left {
+    justify-content: space-around;
+    
+    &:after {
+      content: "";
+    }
   }
 }

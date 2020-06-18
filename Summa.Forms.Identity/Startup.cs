@@ -24,7 +24,7 @@ namespace Summa.Forms.Identity
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddMvc().AddRazorPagesOptions(options => { options.Conventions.AddPageRoute("/Home/Index", ""); });
+			services.AddMvc().AddRazorPagesOptions(options => { options.Conventions.AddPageRoute("/Account/Index", ""); });
 
 			services.AddDbContext<ApplicationDbContext>(options =>
 			{
@@ -166,7 +166,7 @@ namespace Summa.Forms.Identity
 			{
 				endpoints.MapControllerRoute(
 					"default",
-					"{controller=Home}/{action=Index}/{id?}");
+					"{controller=Account}/{action=Index}/{id?}");
 				endpoints.MapRazorPages();
 			});
 		}
