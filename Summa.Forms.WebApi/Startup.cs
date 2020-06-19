@@ -30,7 +30,7 @@ namespace Summa.Forms.WebApi
                 options.EnableSensitiveDataLogging(); //Not safe for production
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
-            
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -62,6 +62,7 @@ namespace Summa.Forms.WebApi
             services.AddScoped<IQuestionService, QuestionService>();
             services.AddScoped<IRepositoryService, RepositoryService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IResponseService, ResponseService>();
 
             services.AddControllers();
         }
