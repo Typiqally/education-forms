@@ -1,0 +1,58 @@
+﻿body {
+  overflow-x: hidden;
+}
+
+.lib-content-header {
+  margin-top: 50px !important;
+  
+  .header {
+    color: black !important;
+    animation: none !important;
+    font-size: 0.75em !important;
+    text-align: center;
+  }
+  
+  .searchbar {
+    input{
+      border-radius: 25px;
+      height: 35px;
+      width: 200px;
+      padding-left: 15px;
+      border: 1px solid #aaaaaa;
+      box-shadow: 0px 0px 10px 0px #00000030;      
+      
+      &:focus,
+      &:active
+      {
+        outline: none;
+        border: 2px solid #717171;
+        padding-left: 14px;
+      }
+    }
+  }
+}
+
+.lib-category-container {
+  margin: 25px 0 0 10vw;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.category-title {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.categories {
+  margin-top: 20px;
+  border-radius: 15px;
+  
+  .category {
+    margin-top: 15px;
+  }
+  
+  .category-selected {
+    font-weight: 600;
+    background-color: black;
+  }
+}
+
