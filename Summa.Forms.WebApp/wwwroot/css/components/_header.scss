@@ -35,6 +35,25 @@
     font-weight: 500;
   }
   
+  .header-btn-new-form {
+    margin: 50px 2px;
+     button {
+       font-size: 20px;
+       font-weight: 600;
+       padding: 15px;
+       border: none;
+       color: white;
+       background-color: $summa-pink;
+       border-radius: 5px;
+       
+       &:focus,
+       &:active
+       {
+         outline: none;
+       }       
+     }
+  }
+  
   @keyframes animateText {
       0% {
         transform: translateY(-50px);
