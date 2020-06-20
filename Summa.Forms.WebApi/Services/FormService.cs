@@ -104,25 +104,15 @@ namespace Summa.Forms.WebApi.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Form> UpdateAsync(Form form)
+        public async Task<Form> UpdateAsync(Form form, Form updated)
         {
-            try
-            {
-                _context.Update(form);
-                _context.Entry(form).Property(x => x.Id).IsModified = false;
-                _context.Entry(form).Property(x => x.AuthorId).IsModified = false;
-                _context.Entry(form).Property(x => x.TimeCreated).IsModified = false;
-                _context.Entry(form).Property(x => x.Title).IsModified = form.Title != null;
-                _context.Entry(form).Reference(x => x.Category).IsModified = false;
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                _logger.LogWarning($"Concurrency exception occured when trying to update form {form.Id}");
-            }
+            form.Title = updated.Title;
+            form.Description = updated.Description;
+            form.Questions = updated.Questions;
 
             await _context.SaveChangesAsync();
-
-            return form;
+            
+            return updated;
         }
 
         public async Task<FormResponse> AddResponseAsync(Form form, IEnumerable<QuestionAnswer> answers)

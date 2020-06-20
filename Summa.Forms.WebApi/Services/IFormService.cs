@@ -13,7 +13,7 @@ namespace Summa.Forms.WebApi.Services
         Task<List<Form>> ListAsync(FormCategory category);
         Task<Question> AddQuestionAsync(Form form, Question question);
         Task RemoveQuestionAsync(Question question);
-        Task<Form> UpdateAsync(Form form);
+        Task<Form> UpdateAsync(Form form, Form updated);
         Task<FormResponse> AddResponseAsync(Form form, IEnumerable<QuestionAnswer> answers);
     }
 }
