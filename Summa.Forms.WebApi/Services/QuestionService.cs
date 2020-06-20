@@ -23,23 +23,25 @@ namespace Summa.Forms.WebApi.Services
             _logger = logger;
         }
 
-        public async Task<Question> GetByIdAsync(Guid formId, Guid questionId, QueryTrackingBehavior tracking = QueryTrackingBehavior.TrackAll)
+        public async Task<Question> GetByIdAsync(Form form, Guid questionId)
         {
-            var subject = _httpContextAccessor.HttpContext.User.GetSubject();
+            var subject = _httpContextAccessor.HttpContext.User.GetSubject().AsGuid();
             return await _context.Forms
-                .Where(x => x.AuthorId.ToString() == subject)
-                .Where(x => x.Id == formId)
+                .Where(x => x.AuthorId == subject)
+                .Where(x => x.Id == form.Id)
                 .Include(x => x.Questions)
                 .ThenInclude(x => x.Options)
-                .AsTracking(tracking)
                 .SelectMany(x => x.Questions)
                 .FirstOrDefaultAsync(x => x.Id == questionId);
         }
 
-        public async Task<QuestionOption> AddOption(Guid formId, Guid questionId, QuestionOption option)
+        public async Task<QuestionOption> GetOptionByIdAsync(Question question, Guid optionId)
         {
-            var question = await GetByIdAsync(formId, questionId);
+            return question.Options.FirstOrDefault(x => x.Id == optionId);
+        }
 
+        public async Task<QuestionOption> AddOption(Question question, QuestionOption option)
+        {
             option.Type = question.Type;
             question.Options.Add(option);
 
@@ -48,13 +50,9 @@ namespace Summa.Forms.WebApi.Services
             return option;
         }
 
-        public async Task RemoveOption(Guid formId, Guid questionId, Guid optionId)
+        public async Task RemoveOption(QuestionOption option)
         {
-            var question = await GetByIdAsync(formId, questionId);
-            var option = question.Options.FirstOrDefault(x => x.Id == optionId);
-
-            question.Options.Remove(option);
-
+            _context.Entry(option).State = EntityState.Deleted;
             await _context.SaveChangesAsync();
         }
     }

@@ -25,18 +25,7 @@ namespace Summa.Forms.WebApp.Controllers
             _formProxyService = formProxyService;
             _questionProxyService = questionProxyService;
         }
-
-        public IActionResult Index()
-        {
-            var exp = HttpContext.User.Claims;
-            foreach (var claim in exp)
-            {
-                Console.WriteLine(claim.Type + " " + claim.Value);
-            }
-            
-            return View();
-        }
-
+        
         [HttpGet("edit/{formId}")]
         public async Task<IActionResult> Edit(Guid formId)
         {

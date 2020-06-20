@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Summa.Forms.Models;
 using Summa.Forms.WebApp.Json;
@@ -9,6 +10,6 @@ namespace Summa.Forms.WebApp.Services
     {
         Task<JsonHttpResponseMessage<List<RepositoryForm>>> ListAsync();
         Task<JsonHttpResponseMessage<List<RepositoryForm>>> ListByCategoryAsync(FormCategory category);
-        Task AddAsync(Form form);
+        Task<HttpRequestMessage> AddAsync(Form form);
     }
 }

@@ -1,0 +1,11 @@
+﻿@model FormResponse
+
+<div>ID: @Model.Id</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+            const model = @Html.Raw(Json.Serialize(Model));
+            console.log(model);
+    </script>
+}
