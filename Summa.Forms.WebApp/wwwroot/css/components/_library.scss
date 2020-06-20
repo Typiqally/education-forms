@@ -10,6 +10,7 @@
     animation: none !important;
     font-size: 0.75em !important;
     text-align: center;
+    flex-direction: row !important;
   }
   
   .searchbar {
@@ -19,7 +20,7 @@
       width: 200px;
       padding-left: 15px;
       border: 1px solid #aaaaaa;
-      box-shadow: 0px 0px 10px 0px #00000030;      
+      box-shadow: 0 0 10px 0 #00000030;
       
       &:focus,
       &:active
@@ -27,6 +28,25 @@
         outline: none;
         border: 2px solid #717171;
         padding-left: 14px;
+      }
+    }
+
+    button {
+      margin-left: 15px;
+      font-size: 25px;
+      font-weight: bold;
+      background-color: $summa-pink;
+      border-radius: 100px;
+      border: none;
+      height: 35px;
+      width: 35px;
+      color: white;
+      box-shadow: 0 0 10px 0 #00000050;
+
+      &:focus,
+      &:active
+      {
+        outline: none;
       }
     }
   }
@@ -56,3 +76,18 @@
   }
 }
 
+.btn-page-navigators {
+  button {
+    margin: 25px;
+    border: none;
+    background: none;
+    font-size: 30px;
+    color: #434343;
+
+    &:focus,
+    &:active
+    {
+      outline: none;
+    }
+  }
+}

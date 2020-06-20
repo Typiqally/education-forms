@@ -19,6 +19,11 @@ namespace Summa.Forms.WebApp.Controllers
             return View();
         }
         
+        public IActionResult MyForms()
+        {
+            return View();
+        }
+        
         public IActionResult Library()
         {
             return View();
