@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -15,12 +16,14 @@ namespace Summa.Forms.WebApi.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IEmailSender _emailSender;
         private readonly ILogger<FormService> _logger;
 
-        public FormService(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor, ILogger<FormService> logger)
+        public FormService(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor, IEmailSender emailSender, ILogger<FormService> logger)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
+            _emailSender = emailSender;
             _logger = logger;
         }
 
@@ -111,13 +114,15 @@ namespace Summa.Forms.WebApi.Services
             form.Questions = updated.Questions;
 
             await _context.SaveChangesAsync();
-            
+
             return updated;
         }
 
         public async Task<FormResponse> AddResponseAsync(Form form, IEnumerable<QuestionAnswer> answers)
         {
             var subject = _httpContextAccessor.HttpContext.User.GetSubject();
+            var email = _httpContextAccessor.HttpContext.User.GetEmail();
+
             var response = new FormResponse
             {
                 FormId = form.Id,
@@ -127,6 +132,9 @@ namespace Summa.Forms.WebApi.Services
 
             await _context.Responses.AddRangeAsync(response);
             await _context.SaveChangesAsync();
+
+            await _emailSender.SendEmailAsync(email, $"{form.Title} Results",
+                $"You can check your results by <a href='{HtmlEncoder.Default.Encode($"https://localhost:5001/Response/{response.Id}")}'>clicking here</a>.");
 
             return response;
         }

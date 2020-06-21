@@ -8,5 +8,10 @@ namespace Summa.Forms.WebApi.Extensions
         {
             return claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
         }
+        
+        public static string GetEmail(this ClaimsPrincipal claimsPrincipal)
+        {
+            return claimsPrincipal.FindFirstValue("name");
+        }
     }
 }

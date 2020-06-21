@@ -58,6 +58,7 @@ namespace Summa.Forms.WebApi
                 }));
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IFormService, FormService>();
             services.AddScoped<IQuestionService, QuestionService>();
             services.AddScoped<IRepositoryService, RepositoryService>();
