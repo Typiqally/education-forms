@@ -86,6 +86,9 @@ namespace Summa.Forms.WebApi.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("FormId")
                         .HasColumnType("uniqueidentifier");
 
@@ -99,6 +102,8 @@ namespace Summa.Forms.WebApi.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("FormId");
 
@@ -127,6 +132,25 @@ namespace Summa.Forms.WebApi.Data.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("QuestionAnswer");
+                });
+
+            modelBuilder.Entity("Summa.Forms.Models.QuestionCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("FormId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FormId");
+
+                    b.ToTable("QuestionCategory");
                 });
 
             modelBuilder.Entity("Summa.Forms.Models.QuestionOption", b =>
@@ -194,6 +218,12 @@ namespace Summa.Forms.WebApi.Data.Migrations
 
             modelBuilder.Entity("Summa.Forms.Models.Question", b =>
                 {
+                    b.HasOne("Summa.Forms.Models.QuestionCategory", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Summa.Forms.Models.Form", "Form")
                         .WithMany("Questions")
                         .HasForeignKey("FormId")
@@ -212,6 +242,13 @@ namespace Summa.Forms.WebApi.Data.Migrations
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Summa.Forms.Models.QuestionCategory", b =>
+                {
+                    b.HasOne("Summa.Forms.Models.Form", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("FormId");
                 });
 
             modelBuilder.Entity("Summa.Forms.Models.QuestionOption", b =>

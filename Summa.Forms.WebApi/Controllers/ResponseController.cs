@@ -19,7 +19,7 @@ namespace Summa.Forms.WebApi.Controllers
         }
 
         [HttpGet("{responseId}")]
-        public async Task<IActionResult> Get6Response(Guid responseId)
+        public async Task<IActionResult> GetResponse(Guid responseId)
         {
             var response = await _responseService.GetByIdAsync(responseId);
             return new JsonResult(response, JsonSerializationConstants.SerializerOptions);

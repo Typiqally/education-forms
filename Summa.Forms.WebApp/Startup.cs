@@ -91,6 +91,7 @@ namespace Summa.Forms.WebApp
             services.AddScoped<IQuestionProxyService, QuestionProxyService>();
             services.AddScoped<IRepositoryProxyService, RepositoryProxyService>();
             services.AddScoped<IResponseProxyService, ResponseProxyService>();
+            services.AddScoped<ICategoryProxyService, CategoryProxyService>();
             services.AddTransient(sp => new HttpClient
             {
                 BaseAddress = new Uri("https://localhost:5002"),

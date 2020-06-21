@@ -8,6 +8,11 @@
   }
 
   &.vertical-center {
+    height: 100%;
+    align-content: center;
+  }
+
+  &.horizontal-center {
     justify-content: center;
   }
 

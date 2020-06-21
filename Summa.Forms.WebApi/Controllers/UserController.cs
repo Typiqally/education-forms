@@ -33,7 +33,7 @@ namespace Summa.Forms.WebApi.Controllers
         [HttpGet("forms/{guid}")]
         public async Task<IActionResult> GetFormsByCategory(Guid guid)
         {
-            var category = await _categoryService.GetByIdAsync(guid);
+            var category = await _categoryService.GetFormCategoryByIdAsync(guid);
             var forms = await _formService.ListAsync(category);
 
             return new JsonResult(forms, JsonSerializationConstants.SerializerOptions);

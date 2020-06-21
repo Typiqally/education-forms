@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Summa.Forms.Models;
@@ -16,14 +17,27 @@ namespace Summa.Forms.WebApi.Services
             _context = context;
         }
 
-        public async Task<List<FormCategory>> ListAsync()
+        public async Task<List<FormCategory>> ListFormCategoriesAsync()
         {
             return await _context.Categories.ToListAsync();
         }
 
-        public async Task<FormCategory> GetByIdAsync(Guid id)
+        public async Task<FormCategory> GetFormCategoryByIdAsync(Guid id)
         {
             return await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<List<QuestionCategory>> ListQuestionCategoriesAsync(Form form)
+        {
+            return await _context.Forms.Where(x => x.Id == form.Id)
+                .Include(x => x.Categories)
+                .SelectMany(x => x.Categories)
+                .ToListAsync();
+        }
+
+        public Task<QuestionCategory> GetQuestionCategoryByIdAsync(Form form, Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

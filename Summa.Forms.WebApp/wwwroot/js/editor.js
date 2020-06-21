@@ -28,7 +28,7 @@ class FormBuilder {
     }
 
     build() {
-        const node = createNode("div", "form-editor"),
+        const node = createNode("div", "form form-editor"),
             container = createNode("div", "container form"),
             content = createNode("div", "container-content"),
             titleInput = FormTracker.buildTrackedInput(this.form, "text", "title"),
@@ -43,7 +43,24 @@ class FormBuilder {
             FormBuilder.buildLineInput(descriptionInput)
         );
 
-        container.append(content, toolbar);
+        this.form.categories.forEach(category => {
+            const builder = new CategoryBuilder(this.form, category);
+            const categoryNode = builder.build();
+
+            content.appendChild(categoryNode);
+        });
+
+        const category = createNode("div", "category add"),
+            icon = FormBuilder.buildMaterialIcon("category"),
+            input = createNode("input"),
+            lineInput = FormBuilder.buildLineInput(input);
+
+        input.placeholder = "Add a category";
+        category.append(icon, lineInput);
+        content.appendChild(category);
+
+        container.appendChild(content);
+        container.appendChild(toolbar);
         node.appendChild(container);
 
         this.form.questions.orderedForEach(question => {
@@ -74,6 +91,29 @@ class FormBuilder {
     }
 }
 
+class CategoryBuilder {
+    constructor(form, category) {
+        this.form = form;
+        this.category = category;
+    }
+
+    build() {
+        const container = createNode("div"),
+            radio = FormBuilder.buildMaterialIcon("category"),
+            input = FormTracker.buildTrackedInput(this.category, "text", "value"),
+            remove = FormBuilder.buildMaterialIcon("close", "btn-icon remove");
+
+        container.id = this.category.id;
+        container.className = "category";
+
+        container.appendChild(radio);
+        container.appendChild(FormBuilder.buildLineInput(input));
+        container.appendChild(remove);
+
+        return container;
+    }
+}
+
 class QuestionBuilder {
     constructor(form, question) {
         this.form = form;
@@ -84,10 +124,11 @@ class QuestionBuilder {
         const container = createNode("div", "container question"),
             content = createNode("div", "container-content"),
             input = FormTracker.buildTrackedInput(this.question, "text", "title"),
+            select = FormTracker.buildTrackedSelect(this.question, this.form.categories, this.question.categoryId, "category"),
             toolbar = FormTracker.buildTrackedQuestionToolbar();
 
         container.id = this.question.id;
-        container.append(FormBuilder.buildLineInput(input));
+        container.append(FormBuilder.buildLineInput(input), select);
 
         const nodes = this.buildOptions();
         nodes.forEach((element) => content.append(element));
@@ -186,10 +227,10 @@ class FormTracker {
 
     renderQuestion = (question, predecessor) => {
         predecessor = predecessor !== undefined ? predecessor : this.node.children[0];
-        
+
         const builder = new QuestionBuilder(this.form, question);
         const questionNode = builder.build();
-        
+
         this.node.insertBefore(questionNode, predecessor.nextSibling)
         this.trackQuestion(question);
     }
@@ -198,16 +239,41 @@ class FormTracker {
         const node = document.getElementById(question.id).querySelector(".container-content");
         const builder = new OptionBuilder(this.form, question, option);
         const optionNode = builder.build();
-        
+
         node.insertBefore(optionNode, node.lastChild);
         this.trackOption(question, option);
     }
 
+    renderCategory = (category) => {
+        const node = document.getElementById(this.form.id).querySelector(".container-content");
+        const builder = new CategoryBuilder(this.form, category);
+        const categoryNode = builder.build();
+
+        node.insertBefore(categoryNode, node.lastChild);
+        this.trackCategory(category);
+        
+        this.form.questions.forEach(question => {
+           const select = document.getElementById(`${question.id}-category`),
+               option = createNode("option");
+           
+           option.value = category.id;
+           option.innerHTML = category.value;
+           
+           select.appendChild(option);
+        });
+    }
+
     track = () => {
         const formNode = document.getElementById(this.form.id),
-            toolbar = formNode.querySelector(".container-footer");
+            content = formNode.querySelector(".container-content")
+        toolbar = formNode.querySelector(".container-footer");
 
+        Array.from(content.querySelectorAll(".add")).forEach(input => input.onclick = async () => await this.addAndRenderCategory());
         Array.from(toolbar.querySelectorAll(".add")).forEach(input => input.onclick = async () => await this.addAndRenderQuestion());
+
+        this.form.categories.forEach(category => {
+            this.trackCategory(category);
+        });
 
         this.form.questions.forEach(question => {
             this.trackQuestion(question);
@@ -226,6 +292,15 @@ class FormTracker {
         Array.from(content.querySelectorAll(".add")).forEach(input => input.onclick = async () => await this.addAndRenderOption(question));
         Array.from(toolbar.querySelectorAll(".remove")).forEach(input => input.onclick = async () => await this.removeQuestion(question, questionNode));
         Array.from(toolbar.querySelectorAll(".add")).forEach(input => input.onclick = async () => await this.addAndRenderQuestion(questionNode));
+    }
+
+    trackCategory = (category) => {
+        const categoryNode = document.getElementById(category.id),
+            removeNodes = categoryNode.getElementsByClassName("remove");
+
+        Array.from(removeNodes).forEach(input =>
+            input.onclick = async () => await this.removeCategory(category, categoryNode)
+        );
     }
 
     trackOption = (question, option) => {
@@ -253,15 +328,19 @@ class FormTracker {
         this.form.title = document.getElementById(`${this.form.id}-title`).getAttribute("data-initial-title");
         this.form.description = document.getElementById(`${this.form.id}-description`).getAttribute("data-initial-description");
 
-        this.form.questions
-            .forEach((question) => {
-                question.title = document.getElementById(`${question.id}-title`).getAttribute("data-initial-title");
+        this.form.categories.forEach((category) => {
+            category.value = document.getElementById(`${category.id}-value`).getAttribute("data-initial-value");
+        });
 
-                question.options.forEach((option) => {
-                    option.title = document.getElementById(`${option.id}-title`).getAttribute("data-initial-title");
-                    option.value = parseInt(document.getElementById(`${option.id}-value`).getAttribute("data-initial-value"));
-                });
+        this.form.questions.forEach((question) => {
+            question.title = document.getElementById(`${question.id}-title`).getAttribute("data-initial-title");
+            question.categoryId = document.getElementById(`${question.id}-category`).getAttribute("data-initial-category");
+
+            question.options.forEach((option) => {
+                option.title = document.getElementById(`${option.id}-title`).getAttribute("data-initial-title");
+                option.value = parseInt(document.getElementById(`${option.id}-value`).getAttribute("data-initial-value"));
             });
+        });
 
         const url = `/form/${this.form.id}`;
         await request(url, "PUT", this.form);
@@ -296,7 +375,7 @@ class FormTracker {
     }
 
     addOption = async (question) => {
-        const index = question.options.nextIndex()
+        const index = question.options.nextIndex();
         const model = {
             index: index,
             title: `Option ${index + 1}`,
@@ -304,6 +383,16 @@ class FormTracker {
         };
 
         const url = `/form/${this.form.id}/question/${question.id}/option`;
+        return await request(url, "POST", model);
+    }
+
+    addCategory = async () => {
+        const index = this.form.categories.nextIndex();
+        const model = {
+            value: `Category`,
+        };
+
+        const url = `/form/${this.form.id}/category/`;
         return await request(url, "POST", model);
     }
 
@@ -319,8 +408,15 @@ class FormTracker {
     addAndRenderOption = async (question) => {
         const option = await this.addOption(question);
         question.options.push(option);
-        
+
         this.renderOption(question, option);
+    }
+
+    addAndRenderCategory = async () => {
+        const category = await this.addCategory();
+        this.form.categories.push(category);
+
+        this.renderCategory(category);
     }
 
     removeTrackedNode = (node, list, object) => {
@@ -349,6 +445,16 @@ class FormTracker {
         this.removeTrackedNode(node, question.options, option);
     }
 
+    removeCategory = async (category, node) => {
+        if (this.form.categories.length <= 1)
+            return;
+
+        const url = `/form/${this.form.id}/category/${category.id}/`;
+        await request(url, "DELETE");
+
+        this.removeTrackedNode(node, this.form.categories, category);
+    }
+
     static onInputEdited = (event, name) => {
         const element = event.path[0];
         element.setAttribute(name, element.value);
@@ -363,6 +469,26 @@ class FormTracker {
         node.value = object[key];
         node.setAttribute(name, object[key]);
         node.oninput = event => this.onInputEdited(event, name);
+
+        return node;
+    }
+
+    static buildTrackedSelect = (object, list, selected, key) => {
+        const node = createNode("select");
+        const name = `data-initial-${key}`;
+
+        node.id = `${object.id}-${key}`;
+        node.oninput = event => this.onInputEdited(event, name);
+
+        list.forEach((item) => {
+            const option = createNode("option");
+            option.value = item.id;
+            option.innerHTML = item.value;
+            node.appendChild(option);
+        });
+
+        node.value = selected;
+        node.setAttribute(name, selected);
 
         return node;
     }

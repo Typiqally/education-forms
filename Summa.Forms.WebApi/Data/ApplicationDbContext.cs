@@ -25,7 +25,7 @@ namespace Summa.Forms.WebApi.Data
                     .HasForeignKey(x => x.FormId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
-            
+
             modelBuilder.Entity<Question>(entity =>
             {
                 entity.HasMany(x => x.Options)

@@ -31,6 +31,7 @@ namespace Summa.Forms.WebApi.Services
         {
             var form = await _context.Forms.Where(x => x.Id == guid)
                 .Include(x => x.Category)
+                .Include(x => x.Categories)
                 .Include(x => x.Questions)
                 .ThenInclude(x => x.Options)
                 .FirstOrDefaultAsync();
@@ -60,6 +61,32 @@ namespace Summa.Forms.WebApi.Services
                 .ToListAsync();
 
             return forms;
+        }
+
+        public async Task<Form> UpdateAsync(Form form, Form updated)
+        {
+            form.Title = updated.Title;
+            form.Description = updated.Description;
+            form.Categories = updated.Categories;
+            form.Questions = updated.Questions;
+
+            await _context.SaveChangesAsync();
+
+            return updated;
+        }
+
+        public async Task<QuestionCategory> AddCategoryAsync(Form form, QuestionCategory category)
+        {
+            form.Categories.Add(category);
+            await _context.SaveChangesAsync();
+
+            return category;
+        }
+
+        public async Task RemoveCategoryAsync(QuestionCategory category)
+        {
+            _context.Entry(category).State = EntityState.Deleted;
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Question> AddQuestionAsync(Form form, Question question)
@@ -94,6 +121,7 @@ namespace Summa.Forms.WebApi.Services
                     throw new ArgumentOutOfRangeException();
             }
 
+            question.Category = form.Categories.FirstOrDefault();
             form.Questions.Add(question);
 
             await _context.SaveChangesAsync();
@@ -105,17 +133,6 @@ namespace Summa.Forms.WebApi.Services
         {
             _context.Entry(question).State = EntityState.Deleted;
             await _context.SaveChangesAsync();
-        }
-
-        public async Task<Form> UpdateAsync(Form form, Form updated)
-        {
-            form.Title = updated.Title;
-            form.Description = updated.Description;
-            form.Questions = updated.Questions;
-
-            await _context.SaveChangesAsync();
-
-            return updated;
         }
 
         public async Task<FormResponse> AddResponseAsync(Form form, IEnumerable<QuestionAnswer> answers)

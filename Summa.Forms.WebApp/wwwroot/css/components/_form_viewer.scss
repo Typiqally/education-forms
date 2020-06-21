@@ -2,10 +2,9 @@
   font-family: 'Open Sans', sans-serif;
   background-color: white;
   height: 18rem;
-  width: 10vw;
-  margin: 25px;
+  width: 100%;
   border-radius: 10px;
-  box-shadow: 0px 0px 20px 0px #00000030;
+  box-shadow: 0 0 20px 0 #00000030;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -13,7 +12,7 @@
 
   .lib-block-image {
     background-color: gray;
-    border-radius: 10px 10px 0px 0px;
+    border-radius: 10px 10px 0 0;
     height: 50%;
 
     img {

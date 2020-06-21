@@ -27,10 +27,21 @@ namespace Summa.Forms.WebApi.Services
         public async Task<FormResponse> GetByIdAsync(Guid responseId)
         {
             var subject = _httpContextAccessor.HttpContext.User.GetSubject().AsGuid();
-            return await _context.Responses
+            var response = await _context.Responses
                 .Where(x => x.UserId == subject || x.Form.AuthorId == subject)
                 .Include(x => x.Answers)
+                .ThenInclude(x => x.Question)
+                .ThenInclude(x => x.Category)
                 .FirstOrDefaultAsync(x => x.Id == responseId);
+
+            if (response == null) return null;
+
+            foreach (var answer in response.Answers)
+            {
+                answer.Category = answer.Question.Category;
+            }
+
+            return response;
         }
 
         public async Task<List<FormResponse>> ListAsync()

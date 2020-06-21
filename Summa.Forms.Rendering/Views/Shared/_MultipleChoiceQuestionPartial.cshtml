@@ -1,12 +1,14 @@
 ﻿@model Summa.Forms.Models.Question
 
-<div>@Model.Title</div>
-
-@{
-    foreach (var option in Model.Options.OrderBy(x => x.Index))
-    {
-        <input id="@option.Id" name="@Model.Id" type="radio" value="@option.Value">
-        <label for="@option.Id">@option.Title</label>
-        <br>
+<div class="container question">
+    <div class="display-5">@Model.Title</div>
+    @{
+        foreach (var option in Model.Options.OrderBy(x => x.Index))
+        {
+            <div class="option">
+                <input id="@option.Id" name="@Model.Id" type="radio" value="@option.Value">
+                <label for="@option.Id">@option.Title</label>
+            </div>
+        }
     }
-}
+</div>

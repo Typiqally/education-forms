@@ -1,17 +1,17 @@
 ﻿@import "../base/colors";
 
 .waves-container {
-  position: relative;
+  position: absolute;
   min-height: 32rem;
   width: 100vw;
   background: $summa-blue;
 
   &.fill {
+    position: fixed;
     height: 100vh;
   }
   
   &.background {
-    position: absolute;
     top: 0;
     z-index: -1;
   }

@@ -18,14 +18,16 @@ namespace Summa.Forms.WebApp.Controllers
     public class FormController : Controller
     {
         private readonly IFormProxyService _formProxyService;
+        private readonly ICategoryProxyService _categoryProxyService;
         private readonly IQuestionProxyService _questionProxyService;
 
-        public FormController(IFormProxyService formProxyService, IQuestionProxyService questionProxyService)
+        public FormController(IFormProxyService formProxyService, ICategoryProxyService categoryProxyService, IQuestionProxyService questionProxyService)
         {
             _formProxyService = formProxyService;
+            _categoryProxyService = categoryProxyService;
             _questionProxyService = questionProxyService;
         }
-        
+
         [HttpGet("edit/{formId}")]
         public async Task<IActionResult> Edit(Guid formId)
         {
@@ -56,6 +58,31 @@ namespace Summa.Forms.WebApp.Controllers
             var response = await _formProxyService.UpdateAsync(formId, form);
 
             return response.GetJsonResult(JsonSerializationConstants.SerializerOptions);
+        }
+
+        [HttpGet("{formId}/category")]
+        public async Task<IActionResult> GetCategories(Guid formId)
+        {
+            var response = await _categoryProxyService.ListQuestionCategoriesAsync(formId);
+
+            return response.GetJsonResult(JsonSerializationConstants.SerializerOptions);
+        }
+
+
+        [HttpPost("{formId}/category")]
+        public async Task<IActionResult> PostCategory(Guid formId, [FromBody] QuestionCategory category)
+        {
+            var response = await _formProxyService.AddCategoryAsync(formId, category);
+
+            return response.GetJsonResult(JsonSerializationConstants.SerializerOptions);
+        }
+
+        [HttpDelete("{formId}/category/{categoryId}")]
+        public async Task<IActionResult> DeleteCategory(Guid formId, Guid categoryId)
+        {
+            var response = await _formProxyService.RemoveCategoryAsync(formId, categoryId);
+
+            return response.GetNoContentResult();
         }
 
         [HttpPost("{formId}/question")]

@@ -11,6 +11,8 @@ namespace Summa.Forms.WebApi.Services
         Task<Form> GetByIdAsync(Guid guid);
         Task<List<Form>> ListAsync();
         Task<List<Form>> ListAsync(FormCategory category);
+        Task<QuestionCategory> AddCategoryAsync(Form form, QuestionCategory category);
+        Task RemoveCategoryAsync(QuestionCategory category);
         Task<Question> AddQuestionAsync(Form form, Question question);
         Task RemoveQuestionAsync(Question question);
         Task<Form> UpdateAsync(Form form, Form updated);

@@ -1,0 +1,21 @@
+﻿.responsegraph-container {
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px 0px #00000030;
+  background-color: white;
+  height: 30vw;
+  width: 40vw;
+  padding: 25px 35px;
+  animation: animateContainer 1000ms cubic-bezier(0.5, 0, 0.2, 1);
+}
+
+.graph-container {
+  height: 92%;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}
+
+.result-title {
+  font-size: 2em;
+  font-weight: 600;
+}

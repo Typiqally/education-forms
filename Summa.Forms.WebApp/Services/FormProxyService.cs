@@ -47,6 +47,25 @@ namespace Summa.Forms.WebApp.Services
 
             return await _http.SendAsync<List<Form>>(requestMessage);
         }
+        
+        public async Task<JsonHttpResponseMessage<QuestionCategory>> AddCategoryAsync(Guid formId, QuestionCategory category)
+        {
+            var token = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, $"/form/{formId}/category")
+                .SetBearerToken(token)
+                .SetBody(category);
+
+            return await _http.SendAsync<QuestionCategory>(requestMessage);
+        }
+
+        public async Task<HttpResponseMessage> RemoveCategoryAsync(Guid formId, Guid categoryId)
+        {
+            var token = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
+            var requestMessage = new HttpRequestMessage(HttpMethod.Delete, $"/form/{formId}/category/{categoryId}")
+                .SetBearerToken(token);
+
+            return await _http.SendAsync(requestMessage);
+        }
 
         public async Task<JsonHttpResponseMessage<Question>> AddQuestionAsync(Guid formId, Question question)
         {
