@@ -24,10 +24,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Extensions" />
-    </ItemGroup>
-
-    <ItemGroup>
       <_ContentIncludedByDefault Remove="Pages\Home\Index.cshtml" />
       <_ContentIncludedByDefault Remove="Pages\Home\Privacy.cshtml" />
       <_ContentIncludedByDefault Remove="Pages\Home\_ViewImports.cshtml" />
