@@ -18,7 +18,7 @@
         .then((data) => {
             return data;
         })
-        .catch((error, data) => {
-            console.error(error);
+        .catch((error) => {
+            return error;
         });
 };

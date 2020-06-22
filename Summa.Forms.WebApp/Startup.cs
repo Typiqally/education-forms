@@ -73,18 +73,11 @@ namespace Summa.Forms.WebApp
                         NameClaimType = "name",
                         RoleClaimType = "role"
                     };
-                    
+
                     options.AccessDeniedPath = "/";
                 });
 
-            services.AddControllersWithViews(options =>
-            {
-                // TODO: Awaiting credentials for Azure AD
-                // var policy = new AuthorizationPolicyBuilder()
-                //     .RequireAuthenticatedUser()
-                //     .Build();
-                // options.Filters.Add(new AuthorizeFilter(policy));
-            });
+            services.AddControllersWithViews();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IFormProxyService, FormProxyService>();

@@ -1,4 +1,44 @@
+$grid-prefix: '.col';
+$grid-end: 12;
+$grid-map: (
+        default: (prefix: null, min-width: null, base-font: 16px),
+        small: (prefix: 'sm', min-width: 576px, base-font: 16px),
+        medium: (prefix: 'md', min-width: 768px, base-font: 16px),
+        large: (prefix: 'lg', min-width: 992px, base-font: 16px),
+        xlarge: (prefix: 'xl', min-width: 1200px, base-font: 16px)
+);
+@mixin generate($grid-entry) {
+  $prefix: map-get($grid-entry, prefix);
+  @if ($prefix) {
+    $prefix: '-#{$prefix}';
+  }
+  @for $i from 1 through $grid-end {
+    #{$grid-prefix}#{$prefix}-#{$i} {
+      flex: 0 0 percentage($i/$grid-end);
+      max-width: percentage($i/$grid-end);
+    }
+  }
+}
+
+@each $grid, $grid-entry in $grid-map {
+  $min-width: map-get($grid-entry, min-width);
+  @if ($min-width) {
+    @media (min-width: $min-width) {
+      @include generate($grid-entry);
+    }
+  } @else {
+    @include generate($grid-entry);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
 .row {
+  display: flex;
+  flex-wrap: wrap;
+
   &.fill {
     height: 100%;
   }
@@ -15,12 +55,8 @@
   &.horizontal-center {
     justify-content: center;
   }
-
-  &.left {
-    justify-content: space-around;
-
-    &:after {
-      content: "";
-    }
+  
+  &.margin {
+    margin: 0 .5rem;
   }
 }

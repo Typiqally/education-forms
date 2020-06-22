@@ -251,15 +251,15 @@ class FormTracker {
 
         node.insertBefore(categoryNode, node.lastChild);
         this.trackCategory(category);
-        
+
         this.form.questions.forEach(question => {
-           const select = document.getElementById(`${question.id}-category`),
-               option = createNode("option");
-           
-           option.value = category.id;
-           option.innerHTML = category.value;
-           
-           select.appendChild(option);
+            const select = document.getElementById(`${question.id}-category`),
+                option = createNode("option");
+
+            option.value = category.id;
+            option.innerHTML = category.value;
+
+            select.appendChild(option);
         });
     }
 
@@ -445,14 +445,19 @@ class FormTracker {
         this.removeTrackedNode(node, question.options, option);
     }
 
+    //TODO: Actually make a good error handling...
     removeCategory = async (category, node) => {
         if (this.form.categories.length <= 1)
             return;
 
         const url = `/form/${this.form.id}/category/${category.id}/`;
-        await request(url, "DELETE");
+        const response = await request(url, "DELETE");
 
-        this.removeTrackedNode(node, this.form.categories, category);
+        if (response === "") {
+            return this.removeTrackedNode(node, this.form.categories, category);
+        }
+
+        return alert("This category is still being used");
     }
 
     static onInputEdited = (event, name) => {
