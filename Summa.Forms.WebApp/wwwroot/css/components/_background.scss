@@ -1,10 +1,11 @@
 ﻿@import "../base/colors";
 
 .waves-container {
+  z-index: -1;
   position: relative;
-  min-height: 32rem;
+  min-height: 31rem;
   width: 100vw;
-  background: $summa-blue;
+  background: #24126e;
   padding-bottom: 2rem;
 
   &.fill {
@@ -19,7 +20,7 @@
       left: 0;
       height: 100%;
       width: 100%;
-      z-index: -1;
+      z-index: -2;
     }
   }
 
