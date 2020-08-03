@@ -8,6 +8,7 @@ namespace Summa.Forms.WebApi.Services
 {
     public interface IFormService
     {
+        Task<Form> CreateAsync(FormCategory category);
         Task<Form> GetByIdAsync(Guid guid);
         Task<List<Form>> ListAsync();
         Task<List<Form>> ListAsync(FormCategory category);

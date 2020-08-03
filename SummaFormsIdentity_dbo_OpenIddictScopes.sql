@@ -1,1 +1,0 @@
-INSERT INTO SummaFormsIdentity.dbo.OpenIddictScopes (Id, ConcurrencyToken, Description, DisplayName, Name, Properties, Resources) VALUES (N'0677acec-9593-4221-bd97-c26506180589', N'1096e362-b6a0-47ce-9c61-566d14008581', null, N'Summa Forms API access', N'summa_forms_api', null, N'["summa_forms_resources"]');

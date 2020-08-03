@@ -10,9 +10,8 @@ namespace Summa.Forms.Models
         public Guid Id { get; set; }
         public string Value { get; set; }
         public Guid FormId { get; set; }
+
         [JsonIgnore]
         public Form Form { get; set; }
-        [JsonIgnore]
-        public Question Question { get; set; }
     }
 }

@@ -48,6 +48,15 @@ namespace Summa.Forms.WebApi.Controllers
             return new JsonResult(form, JsonSerializationConstants.SerializerOptions);
         }
 
+        [HttpPost("{categoryId}")]
+        public async Task<IActionResult> PostForm(Guid categoryId)
+        {
+            var category = await _categoryService.GetFormCategoryByIdAsync(categoryId);
+            var value = await _formService.CreateAsync(category);
+
+            return new JsonResult(value, JsonSerializationConstants.SerializerOptions);
+        }
+
         [HttpPut("{formId}")]
         public async Task<IActionResult> PutForm(Guid formId, [FromBody] Form updated)
         {
@@ -65,7 +74,7 @@ namespace Summa.Forms.WebApi.Controllers
 
             if (form.Id != updated.Id)
             {
-                return BadRequest("Id's not match");
+                return BadRequest("Id's don't match");
             }
 
             var value = await _formService.UpdateAsync(form, updated);

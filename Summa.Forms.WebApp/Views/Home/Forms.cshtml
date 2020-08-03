@@ -1,10 +1,11 @@
-﻿@{
+﻿@model List<Form>
+@{
     ViewData["Title"] = "Mijn Formulieren";
 }
 
 <div class="waves-container background">
     <partial name="_NavigationPartial"/>
-    <div class="row horizontal-center">
+    <div class="row horizontal-center m-b-2">
         <div class="col-10 col-sm-8">
             <div class="header">
                 <div class="header-title">
@@ -15,12 +16,31 @@
     </div>
 
     <div class="row horizontal-center">
-        <div class="col-10">
-            <div class="row horizontal-center">
-                <partial name="_FormBlockPartial"/>
-                <partial name="_FormBlockPartial"/>
-                <partial name="_FormBlockPartial"/>
-                <partial name="_FormBlockPartial"/>
+        <div class="col-10 col-sm-8">
+            <div class="row">
+                @foreach (var form in Model.OrderByDescending(x => x.TimeCreated).Take(4))
+                {
+                    <div class="col-12 col-sm-5 col-lg-5 col-xl-3 m-5">
+                        <div class="lib-block">
+                            <div class="lib-block-image">
+                                <img src="https://via.placeholder.com/150" alt="">
+                            </div>
+                            <div class="lib-block-text">
+                                <div class="lib-block-description">
+                                    <div class="lib-block-title">@form.Title</div>
+                                    <div class="lib-block-info">
+                                        <p>
+                                            @form.Description
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="lib-block-creator">
+                                    Gemaakt door @form.Email
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -36,21 +56,22 @@
 
 <div class="library">
     <div class="lib-content-header">
-        <div class="row horizontal-center">
+        <div class="row horizontal-center m-b-2">
             <div class="col-10 col-sm-8">
-                <div class="header">
-                    <div class="header-title">
-                        Mijn formulieren
+                <div class="row">
+                    <div class="col-12 col-sm-10 col-lg-11 col-xl-11">
+                        <div class="header">
+                            <div class="header-title">
+                                Mijn formulieren
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-10 col-lg-7 col-xl-5">
-                <div class="header">
-                    <div class="searchbar">
-                        <input type="text" placeholder="Zoek naar een titel of auteur...">
-                    </div>
-                    <div class="searchbar">
-                        <button>+</button>
+                    <div class="col-12 col-sm-10 col-lg-1 col-xl-1">
+                        <div class="library-toolbar">
+                            <div id="add_form" class="library-toolbar-item btn-icon">
+                                <i class="material-icons">add</i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -58,38 +79,44 @@
     </div>
 
     <div class="row horizontal-center">
-        <div class="col-10">
-            <div class="row horizontal-center">
-                <partial name="_FormBlockPartial"/>
-                <partial name="_FormBlockPartial"/>
-                <partial name="_FormBlockPartial"/>
-                <partial name="_FormBlockPartial"/>
-            </div>
-            <div class="row horizontal-center">
-                <partial name="_FormBlockPartial"/>
-                <partial name="_FormBlockPartial"/>
-                <partial name="_FormBlockPartial"/>
-                <partial name="_FormBlockPartial"/>
-            </div>
-            <div class="row horizontal-center">
-                <partial name="_FormBlockPartial"/>
-                <partial name="_FormBlockPartial"/>
-                <partial name="_FormBlockPartial"/>
-                <partial name="_FormBlockPartial"/>
-            </div>
-        </div>
-    </div>
-
-    <div class="row horizontal-center">
-        <div class="col-2">
-            <div class="btn-page-navigators">
-                <button>
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button>
-                    <i class="fas fa-chevron-right"></i>
-                </button>
+        <div class="col-10 col-sm-8">
+            <div class="row">
+                @foreach (var form in Model)
+                {
+                    <div class="col-12 col-sm-5 col-lg-5 col-xl-3 m-5">
+                        <div class="lib-block">
+                            <div class="lib-block-image">
+                                <img src="https://via.placeholder.com/150" alt="">
+                            </div>
+                            <div class="lib-block-text">
+                                <div class="lib-block-description">
+                                    <div class="lib-block-title">@form.Title</div>
+                                    <div class="lib-block-info">
+                                        <p>
+                                            @form.Description
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="lib-block-creator">
+                                    Gemaakt door @form.Email
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script type="text/javascript">
+        const add = document.getElementById('add_form');
+        add.onclick = async () => {
+            const response = await request('/form/DD404B62-6C8C-4525-A378-CD136B5F88CA', 'POST');
+            console.log(response);
+         
+            window.location.replace(`/form/${response.id}/edit`);
+        };
+    </script>
+}

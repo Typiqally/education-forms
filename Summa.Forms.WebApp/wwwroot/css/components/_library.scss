@@ -11,38 +11,27 @@
     font-size: 0.75rem;
   }
 
-  .searchbar {
+  .library-toolbar {
+    display: flex;
+    flex-direction: row;
+    
+    &-item:not(:first-child) {
+      margin-left: 1rem;
+    }
+    
     input {
       border-radius: 25px;
-      height: 35px;
-      width: 200px;
-      padding-left: 15px;
+      height: 2.3rem;
+      width: 100%;
+      padding:0 1rem;
       border: 1px solid #aaaaaa;
-      box-shadow: 0 0 10px 0 #00000030;
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 
       &:focus,
       &:active {
         outline: none;
         border: 2px solid #717171;
         padding-left: 14px;
-      }
-    }
-
-    button {
-      margin-left: 15px;
-      font-size: 25px;
-      font-weight: bold;
-      background-color: $summa-pink;
-      border-radius: 100px;
-      border: none;
-      height: 35px;
-      width: 35px;
-      color: white;
-      box-shadow: 0 0 10px 0 #00000050;
-
-      &:focus,
-      &:active {
-        outline: none;
       }
     }
   }

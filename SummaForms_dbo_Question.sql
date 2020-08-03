@@ -1,1 +1,0 @@
-INSERT INTO SummaForms.dbo.Question (Id, Type, FormId, [Index], Title) VALUES (N'D49C7AE0-63E4-42A9-FDB6-08D812EA7069', 0, N'D846B50E-9CFF-4DC1-ABF9-2B0EB78B8447', 0, N'Question 1');

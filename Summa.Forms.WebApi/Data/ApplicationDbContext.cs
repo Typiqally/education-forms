@@ -24,7 +24,7 @@ namespace Summa.Forms.WebApi.Data
                     .WithOne(x => x.Form)
                     .HasForeignKey(x => x.FormId)
                     .OnDelete(DeleteBehavior.Cascade);
-                
+
                 entity.HasMany(x => x.Categories)
                     .WithOne(x => x.Form)
                     .HasForeignKey(x => x.FormId)
@@ -37,10 +37,6 @@ namespace Summa.Forms.WebApi.Data
                     .WithOne(x => x.Question)
                     .HasForeignKey(x => x.QuestionId)
                     .OnDelete(DeleteBehavior.Cascade);
-
-                entity.HasOne(x => x.Category)
-                    .WithOne(x => x.Question)
-                    .OnDelete(DeleteBehavior.Restrict);
             });
         }
 

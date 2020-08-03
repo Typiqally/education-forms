@@ -44,10 +44,6 @@ class GraphBuilder {
                     display: false,
                 },
                 scale: {
-                    ticks: {
-                        suggestedMax: 100,
-                        suggestedMin: 0,
-                    },
                     pointLabels: {
                         fontSize: 16,
                     },

@@ -27,6 +27,30 @@ namespace Summa.Forms.WebApi.Services
             _logger = logger;
         }
 
+        public async Task<Form> CreateAsync(FormCategory category)
+        {
+            var subject = _httpContextAccessor.HttpContext.User.GetSubject().AsGuid();
+            var email = _httpContextAccessor.HttpContext.User.GetEmail();
+            var form = new Form
+            {
+                Title = "Jouw nieuwe formulier",
+                Description = "Verzin een leuke beschrijving voor je formulier",
+                Categories = new List<QuestionCategory>
+                {
+                    new QuestionCategory {Value = "Jouw eerste categorie"}
+                },
+                Category = category,
+                Email = email,
+                AuthorId = subject,
+                TimeCreated = DateTime.Now,
+            };
+
+            await _context.Forms.AddAsync(form);
+            await _context.SaveChangesAsync();
+
+            return form;
+        }
+
         public async Task<Form> GetByIdAsync(Guid guid)
         {
             var form = await _context.Forms.Where(x => x.Id == guid)
@@ -150,8 +174,11 @@ namespace Summa.Forms.WebApi.Services
             await _context.Responses.AddRangeAsync(response);
             await _context.SaveChangesAsync();
 
-            await _emailSender.SendEmailAsync(email, $"{form.Title} Results",
-                $"You can check your results by <a href='{HtmlEncoder.Default.Encode($"https://localhost:5001/Response/{response.Id}")}'>clicking here</a>.");
+            await _emailSender.SendEmailAsync(email, $"{form.Title} resultaten",
+                $"Je kunt je resultaten bekijken door <a href='{HtmlEncoder.Default.Encode($"https://localhost:5001/Response/{response.Id}")}'>hier te klikken</a>.");
+
+            await _emailSender.SendEmailAsync(form.Email, $"{form.Title} resultaten student",
+                $"Je kunt de resultaten van {email} bekijken door <a href='{HtmlEncoder.Default.Encode($"https://localhost:5001/Response/{response.Id}")}'>hier te klikken</a>.");
 
             return response;
         }

@@ -28,7 +28,7 @@ namespace Summa.Forms.WebApp.Controllers
             _questionProxyService = questionProxyService;
         }
 
-        [HttpGet("edit/{formId}")]
+        [HttpGet("{formId}/edit")]
         public async Task<IActionResult> Edit(Guid formId)
         {
             var response = await _formProxyService.GetByIdAsync(formId);
@@ -40,7 +40,7 @@ namespace Summa.Forms.WebApp.Controllers
             return View(response.Data);
         }
 
-        [HttpGet("view/{formId}")]
+        [HttpGet("{formId}/view")]
         public async Task<IActionResult> View(Guid formId)
         {
             var response = await _formProxyService.GetByIdAsync(formId);
@@ -50,6 +50,14 @@ namespace Summa.Forms.WebApp.Controllers
             }
 
             return View(response.Data);
+        }
+        
+        [HttpPost("{categoryId}")]
+        public async Task<IActionResult> PutForm(Guid categoryId)
+        {
+            var response = await _formProxyService.CreateAsync(categoryId);
+
+            return response.GetJsonResult(JsonSerializationConstants.SerializerOptions);
         }
 
         [HttpPut("{formId}")]

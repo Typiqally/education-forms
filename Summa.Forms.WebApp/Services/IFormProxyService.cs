@@ -9,6 +9,7 @@ namespace Summa.Forms.WebApp.Services
 {
     public interface IFormProxyService
     {
+        Task<JsonHttpResponseMessage<Form>> CreateAsync(Guid categoryId);
         Task<JsonHttpResponseMessage<Form>> GetByIdAsync(Guid formId);
         Task<JsonHttpResponseMessage<List<Form>>> ListAsync();
         Task<JsonHttpResponseMessage<List<Form>>> ListByCategoryAsync(FormCategory category);

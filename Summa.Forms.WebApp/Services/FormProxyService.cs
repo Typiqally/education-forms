@@ -21,6 +21,15 @@ namespace Summa.Forms.WebApp.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public async Task<JsonHttpResponseMessage<Form>> CreateAsync(Guid categoryId)
+        {
+            var token = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, $"/Form/{categoryId.ToString()}")
+                .SetBearerToken(token);
+
+            return await _http.SendAsync<Form>(requestMessage);
+        }
+
         public async Task<JsonHttpResponseMessage<Form>> GetByIdAsync(Guid formId)
         {
             var token = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
@@ -33,7 +42,7 @@ namespace Summa.Forms.WebApp.Services
         public async Task<JsonHttpResponseMessage<List<Form>>> ListAsync()
         {
             var token = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
-            var requestMessage = new HttpRequestMessage(HttpMethod.Get, "/users/forms")
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, "/user/forms")
                 .SetBearerToken(token);
 
             return await _http.SendAsync<List<Form>>(requestMessage);
@@ -42,12 +51,12 @@ namespace Summa.Forms.WebApp.Services
         public async Task<JsonHttpResponseMessage<List<Form>>> ListByCategoryAsync(FormCategory category)
         {
             var token = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
-            var requestMessage = new HttpRequestMessage(HttpMethod.Get, $"/users/forms/{category.Id}")
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, $"/user/forms/{category.Id}")
                 .SetBearerToken(token);
 
             return await _http.SendAsync<List<Form>>(requestMessage);
         }
-        
+
         public async Task<JsonHttpResponseMessage<QuestionCategory>> AddCategoryAsync(Guid formId, QuestionCategory category)
         {
             var token = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
